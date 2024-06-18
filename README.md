@@ -1,5 +1,5 @@
 # CCSL-to-ASTD-translation
-CCSL to ASTD Translation
+TCS case study
 
 [![Code Quality Status](https://img.shields.io/badge/code%20quality-B%2B-yellowgreen)](https://img.shields.io/badge/code%20quality-B%2B-yellowgreen)
 [![Build](https://img.shields.io/badge/build-passing-green)](https://img.shields.io/badge/build-passing-green)
