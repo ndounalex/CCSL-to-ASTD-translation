@@ -13,9 +13,6 @@ The installation procedure for eASTD and cASTD can be found in the [here](https:
 
 Go to page [cASTD Wiki](https://depot.gril.usherbrooke.ca/lionel-tidjon/castd/wikis/home)
 
-## Updates
-modifications have been made to our basic specification to better comply with the CONT.44 specification for PCV and PSV modes; because in the specification proposed in our publication for PCV and PSV modes, when inspiration was triggered even if the CONT.44 condition was met, inspiration was not stopped.
-
 
 ## Technical documentation
 
