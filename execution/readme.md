@@ -16,7 +16,9 @@ We implemented 4 test cases to test our specification:
 - The fourth test case to test execution of diagnostic mode followed by a switch to control mode and a return to execution of diagnostic mode after a change in system temperature.
   The test4.txt file contains the input commands and the test4_output.txt file contains the expected outputs.
 
+## Description
 
+An example of a command to run to launch test 1 could be:
 
 
 ## ReadTheDocs
