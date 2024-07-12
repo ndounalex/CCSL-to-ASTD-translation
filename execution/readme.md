@@ -18,7 +18,20 @@ We implemented 4 test cases to test our specification:
 
 ## Description
 
-An example of a command to run to launch test 1 could be:
+An example of a command to run test 1 could be:
+tcs.exe -1 200 -2 150 -3 0 -4 1 -5 2 -6 3 -7 4 -8 5 -9 6 -i test1.txt
+
+with parameters:
+* -1 which corresponds to the MAX temperature value
+* -2 corresponds to the MIN temperature value
+* -3 which corresponds to the index of clock d in the chain of clock ticks
+* -4, which corresponds to the index of clock c in the chain of clock ticks
+* -5 which corresponds to the clock index s in the clock tick string
+* -6 which corresponds to the index of clock p in the clock tick string
+* -7 which corresponds to the index of clock i in the clock tick string
+* -8 which corresponds to the index of clock r in the clock tick string
+* -9 which corresponds to the index of clock z in the clock tick string
+* -i which corresponds to the name of the file containing the test commands
 
 
 ## ReadTheDocs
