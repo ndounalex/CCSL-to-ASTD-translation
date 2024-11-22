@@ -1,0 +1,35 @@
+diagnostic
+advanceOf(sec,1)
+reconfig(true)
+advanceOf(sec,1)
+status_update
+advanceOf(sec,1)
+advanceOf(sec,101)
+advanceOf(sec,11)
+periodic_sense
+advanceOf(sec,1)
+set_temperature(300)
+insert_rod
+advanceOf(sec,1)
+advanceOf(sec,11)
+periodic_sense
+advanceOf(sec,1)
+periodic_sense
+Event is not executable
+advanceOf(sec,11)
+periodic_sense
+set_temperature(50)
+Event is not executable
+advanceOf(sec,1)
+set_temperature(50)
+remove_rod
+advanceOf(sec,1)
+set_temperature(150)
+advanceOf(sec,1)
+diagnostic
+advanceOf(sec,1)
+reconfig(false)
+advanceOf(sec,1)
+advanceOf(sec,1)
+diagnostic
+advanceOf(sec,1)
