@@ -16,7 +16,11 @@ We implemented 4 test cases to test our specification:
 - The fourth test case to test execution of diagnostic mode followed by a switch to control mode and a return to execution of diagnostic mode after a change in system temperature.
   The test4.txt file contains the input commands and the test4_output.txt file contains the expected outputs.
 
-## Description
+To validate our ASTD specification using our CCSL to ASTD translation, we've created an observer that we've synchronized with our specification to validate it, so an event will be valid if it's accepted by our specification and also accepted at the same time by our observer. The tcs_observer.exe file contains the executable to test our observer and the traces_observer.txt file contains the test commands to validate it. The file tcs__observer.cpp contains the c++ source code of our observer coupled with our ASTD specification for validation. The observer is executed in the same way as for the other test cases presented above.
+
+  
+
+## Execution
 
 An example of a command to run test 1 could be:
 tcs.exe -1 200 -2 150 -3 0 -4 1 -5 2 -6 3 -7 4 -8 5 -9 6 -i test1.txt
