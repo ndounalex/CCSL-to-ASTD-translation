@@ -23,7 +23,8 @@ To validate our ASTD specification using our CCSL to ASTD translation, we've cre
 ## Execution
 
 An example of a command to run test 1 could be:
-tcs.exe -1 200 -2 150 -3 0 -4 1 -5 2 -6 3 -7 4 -8 5 -9 6 -i test1.txt
+./tcs -1 200 -2 150 -3 0 -4 1 -5 2 -6 3 -7 4 -8 5 -9 6 -i test1.txt
+(compiled on linux)
 
 with parameters:
 * -1 which corresponds to the MAX temperature value
