@@ -9,9 +9,6 @@
 
 using namespace std;
 
-// vector<int> history;
-int history[7] = {0};
-list<int> delayForCount;
 
 void clockCounterDiff (int &counter, int c1, int c2, string clock){
     int c1_tick = clock[c1] == '1' ? 1:0;
