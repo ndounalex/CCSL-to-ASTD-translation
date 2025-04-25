@@ -13,25 +13,27 @@ using namespace std;
 int history[7] = {0};
 list<int> delayForCount;
 
-
-void updateHistory(int history[],string clock) {
-    for(string::size_type i=0;i<clock.size();i++){
-        if(clock[i]=='1')
-            history[i]++;
-    }
+void clockCounterDiff (int &counter, int c1, int c2, string clock){
+    int c1_tick = clock[c1] == '1' ? 1:0;
+    int c2_tick = clock[c2] == '1' ? 1:0;
+    counter = counter + c1_tick-c2_tick;
 }
 
-void updateOccurenceList(string clock, int c3, int c2, list<int>& listItem, int d) {
-    list<int>::iterator listIterator;
-    if((clock[c2]=='1')&&(listItem.back()!=0)){
-        listItem.push_back(0);
-    }
-    if(clock[c3]=='1'){
-        for(listIterator = listItem.begin(); listIterator != listItem.end();listIterator++){
-            *listIterator = *listIterator + 1;
+void clockCounterMod(int &counter, int c1, string clock, int p) {
+    int c1_tick = clock[c1] == '1' ? 1:0;
+    counter = (counter + c1_tick)%p;
+}
+
+void updateBuffer (int c1, int c2, string clock, int Buffer[] , int d){
+    int c1_tick = clock[c1] == '1' ? 1:0;
+    int c2_tick = clock[c2] == '1' ? 1:0;
+    if(c2_tick){
+        for(int i=d-1;i>0;i--){
+            Buffer[d-1]=Buffer[d-2];
         }
+        Buffer[0]=0;
     }
-    if((listItem.size()> 0) && (listItem.front()==(d+1))){
-        listItem.pop_front();
-    }
-}
+    if(c1_tick){Buffer[0]=1;}
+} 
+
+

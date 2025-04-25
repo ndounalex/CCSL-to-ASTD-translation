@@ -1,4 +1,3 @@
-#include "..\Ccsl translation\delayForModule.cpp"
 #include "utils.cpp"
 #include "helper.h"
 #include <chrono>
@@ -17,22 +16,24 @@ struct TState_S_subclock_C
   AutState  autState;
 
 };
-struct TState_D_precede_C
+struct TState_C_precede_D
 {
+  int  counter;
   AutState  autState;
 
 };
-struct TState_C_precede_D
+struct TState_D_precede_C
 {
+  int  counter;
   AutState  autState;
 
 };
 struct TState_D_alternateWith_C
 {
-  Timer right_clock_D_precede_C = current_time;
-  Timer left_clock_C_precede_D = current_time;
-  TState_C_precede_D  ts_C_precede_D;
+  Timer right_clock_C_precede_D = current_time;
+  Timer left_clock_D_precede_C = current_time;
   TState_D_precede_C  ts_D_precede_C;
+  TState_C_precede_D  ts_C_precede_D;
 
 };
 struct TState_diagnostic
@@ -43,34 +44,24 @@ struct TState_diagnostic
   TState_S_subclock_C  ts_S_subclock_C;
 
 };
-struct TState_P_discretizedBy_10
+struct TState_r_precede_i
 {
-  int  periodic_sense_occurence;
-  Timer periodic_sense_timer = current_time;
+  int  counter;
   AutState  autState;
 
 };
-struct TState_Z_precede_P
+struct TState_IbeforeR
 {
+  int  counter;
   AutState  autState;
 
 };
-struct TState_P_precede_Z
+struct TState_i_alternatesWith_r
 {
-  AutState  autState;
-
-};
-struct TState_P_alternateWith_Z
-{
-  Timer left_clock_P_precede_Z = current_time;
-  Timer right_clock_Z_precede_P = current_time;
-  TState_P_precede_Z  ts_P_precede_Z;
-  TState_Z_precede_P  ts_Z_precede_P;
-
-};
-struct TState_iUr
-{
-  AutState  autState;
+  Timer right_clock_r_precede_i = current_time;
+  Timer left_clock_IbeforeR = current_time;
+  TState_IbeforeR  ts_IbeforeR;
+  TState_r_precede_i  ts_r_precede_i;
 
 };
 struct TState_exclusion
@@ -78,54 +69,68 @@ struct TState_exclusion
   AutState  autState;
 
 };
-struct TState_IbeforeR
-{
-  AutState  autState;
-
-};
-struct TState_r_precede_i
-{
-  AutState  autState;
-
-};
-struct TState_i_alternatesWith_r
-{
-  Timer left_clock_r_precede_i = current_time;
-  Timer right_clock_IbeforeR = current_time;
-  TState_r_precede_i  ts_r_precede_i;
-  TState_IbeforeR  ts_IbeforeR;
-
-};
 struct TState_InsertOrRemoveRod
 {
-  Timer left_clock_i_alternatesWith_r = current_time;
-  Timer right_clock_exclusion = current_time;
-  TState_i_alternatesWith_r  ts_i_alternatesWith_r;
+  Timer right_clock_i_alternatesWith_r = current_time;
+  Timer left_clock_exclusion = current_time;
   TState_exclusion  ts_exclusion;
+  TState_i_alternatesWith_r  ts_i_alternatesWith_r;
+
+};
+struct TState_iUr
+{
+  AutState  autState;
 
 };
 struct TState_T1
 {
-  Timer left_clock_InsertOrRemoveRod = current_time;
-  Timer right_clock_iUr = current_time;
-  TState_InsertOrRemoveRod  ts_InsertOrRemoveRod;
+  Timer left_clock_iUr = current_time;
+  Timer right_clock_InsertOrRemoveRod = current_time;
   TState_iUr  ts_iUr;
+  TState_InsertOrRemoveRod  ts_InsertOrRemoveRod;
+
+};
+struct TState_P_precede_Z
+{
+  int  counter;
+  AutState  autState;
+
+};
+struct TState_Z_precede_P
+{
+  int  counter;
+  AutState  autState;
+
+};
+struct TState_P_alternateWith_Z
+{
+  Timer right_clock_P_precede_Z = current_time;
+  Timer left_clock_Z_precede_P = current_time;
+  TState_Z_precede_P  ts_Z_precede_P;
+  TState_P_precede_Z  ts_P_precede_Z;
 
 };
 struct TState_TCS4
 {
-  Timer left_clock_T1 = current_time;
-  Timer right_clock_P_alternateWith_Z = current_time;
-  TState_T1  ts_T1;
+  Timer right_clock_T1 = current_time;
+  Timer left_clock_P_alternateWith_Z = current_time;
   TState_P_alternateWith_Z  ts_P_alternateWith_Z;
+  TState_T1  ts_T1;
+
+};
+struct TState_P_discretizedBy_10
+{
+  int  periodic_sense_occurence;
+  Timer periodic_sense_timer = current_time;
+  AutState  autState;
 
 };
 struct TState_ControlExecution
 {
-  Timer left_clock_TCS4 = current_time;
-  Timer right_clock_P_discretizedBy_10 = current_time;
-  TState_TCS4  ts_TCS4;
+  Timer left_clock_P_discretizedBy_10 = current_time;
+  Timer right_clock_TCS4 = current_time;
   TState_P_discretizedBy_10  ts_P_discretizedBy_10;
+  TState_TCS4  ts_TCS4;
 
 };
 struct TState_Control
@@ -153,9 +158,9 @@ struct TState_TCS
   TState_diagnostic  ts_diagnostic;
 
 };
-const std::vector<AutState>  shallow_final_r_precede_i = {S0};
-const std::vector<AutState>  shallow_final_IbeforeR = {S0};
 const std::vector<AutState>  shallow_final_exclusion = {S0};
+const std::vector<AutState>  shallow_final_IbeforeR = {S0};
+const std::vector<AutState>  shallow_final_r_precede_i = {S0};
 TState_TCS  ts_TCS;
 std::time_t  step_time = 1.0E9;
 Timer  last_event_time = 0;
@@ -170,27 +175,31 @@ int    Step()
 		std::cout<<"\nGo to control mode\n";
 		;ts_TCS.autState = Control;
 		ts_TCS.ts_Control.autState = ControlExecution;
-		ts_TCS.ts_Control.ts_ControlExecution.left_clock_TCS4.reset_clock(last_event_time);
-		ts_TCS.ts_Control.ts_ControlExecution.right_clock_P_discretizedBy_10.reset_clock(last_event_time);
-		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.left_clock_T1.reset_clock(last_event_time);
-		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.right_clock_P_alternateWith_Z.reset_clock(last_event_time);
-		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.left_clock_InsertOrRemoveRod.reset_clock(last_event_time);
-		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.right_clock_iUr.reset_clock(last_event_time);
-		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.left_clock_i_alternatesWith_r.reset_clock(last_event_time);
-		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.right_clock_exclusion.reset_clock(last_event_time);
-		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.left_clock_r_precede_i.reset_clock(last_event_time);
-		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.right_clock_IbeforeR.reset_clock(last_event_time);
-		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState = S0;
-		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState = S0;
-		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_exclusion.autState = S0;
-		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_iUr.autState = S0;
-		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.left_clock_P_precede_Z.reset_clock(last_event_time);
-		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.right_clock_Z_precede_P.reset_clock(last_event_time);
-		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.autState = S0;
-		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.autState = S0;
+		ts_TCS.ts_Control.ts_ControlExecution.left_clock_P_discretizedBy_10.reset_clock(last_event_time);
+		ts_TCS.ts_Control.ts_ControlExecution.right_clock_TCS4.reset_clock(last_event_time);
 		ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState = S0;
 		ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_occurence = 1;
 		ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_timer.reset_clock(last_event_time);
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.right_clock_T1.reset_clock(last_event_time);
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.left_clock_P_alternateWith_Z.reset_clock(last_event_time);
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.right_clock_P_precede_Z.reset_clock(last_event_time);
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.left_clock_Z_precede_P.reset_clock(last_event_time);
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.autState = S0;
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.counter = 0;
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.autState = S0;
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.counter = 0;
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.left_clock_iUr.reset_clock(last_event_time);
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.right_clock_InsertOrRemoveRod.reset_clock(last_event_time);
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_iUr.autState = S0;
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.right_clock_i_alternatesWith_r.reset_clock(last_event_time);
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.left_clock_exclusion.reset_clock(last_event_time);
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_exclusion.autState = S0;
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.right_clock_r_precede_i.reset_clock(last_event_time);
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.left_clock_IbeforeR.reset_clock(last_event_time);
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState = S0;
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.counter = 0;
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState = S0;
+		ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.counter = 0;
 		exec = 1;
 	
 	}
@@ -203,112 +212,128 @@ int    Step()
 
 }
 
-int    e(std::string   p0)
+int    e(std::string  clock)
 {
 	int  exec = 0;
-	if((ts_TCS.autState == Control && (ts_TCS.ts_Control.autState == ControlExecution && ((((((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState == S0 && ( ((history[ts_TCS.i]-history[ts_TCS.r]) != 2) || (p0[ts_TCS.i] == '0') ) ) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState == S0 && ( ((history[ts_TCS.r]-history[ts_TCS.i]) != 0) || (p0[ts_TCS.r] == '0') ) )) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_exclusion.autState == S0 && ((p0[ts_TCS.i] == '0') || (p0[ts_TCS.r] == '0')) )) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_iUr.autState == S0 && ( (p0[ts_TCS.z]-'0') == ((p0[ts_TCS.r]-'0')+(p0[ts_TCS.i]-'0')) ) )) && ((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( ((history[ts_TCS.z]-history[ts_TCS.p]) != 0) || (p0[ts_TCS.z] == '0') ) ) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( ((history[ts_TCS.p]-history[ts_TCS.z]) != 1) || (p0[ts_TCS.p] == '0') ) ))) && ((ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_TCS.p] == '0') &&! (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_TCS.p] == '1') && (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ))))))
+	if((ts_TCS.autState == Control && (ts_TCS.ts_Control.autState == ControlExecution && (((ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState == S0 && ((clock[ts_TCS.p] == '1') && (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState == S0 && ((clock[ts_TCS.p] == '0') &&! (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) )) || (((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (clock[ts_TCS.p] == '0') ) ) || (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (clock[ts_TCS.z] == '0') ) )) || ((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_iUr.autState == S0 && ( (clock[ts_TCS.z]-'0') == ((clock[ts_TCS.r]-'0')+(clock[ts_TCS.i]-'0')) ) ) || ((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_exclusion.autState == S0 && ((clock[ts_TCS.i] == '0') || (clock[ts_TCS.r] == '0')) ) || ((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.counter != 0) || (clock[ts_TCS.r] == '0') ) ) || (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.counter != 2) || (clock[ts_TCS.i] == '0') ) )))))))))
 	{
-		if((ts_TCS.ts_Control.autState == ControlExecution && ((((((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState == S0 && ( ((history[ts_TCS.i]-history[ts_TCS.r]) != 2) || (p0[ts_TCS.i] == '0') ) ) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState == S0 && ( ((history[ts_TCS.r]-history[ts_TCS.i]) != 0) || (p0[ts_TCS.r] == '0') ) )) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_exclusion.autState == S0 && ((p0[ts_TCS.i] == '0') || (p0[ts_TCS.r] == '0')) )) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_iUr.autState == S0 && ( (p0[ts_TCS.z]-'0') == ((p0[ts_TCS.r]-'0')+(p0[ts_TCS.i]-'0')) ) )) && ((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( ((history[ts_TCS.z]-history[ts_TCS.p]) != 0) || (p0[ts_TCS.z] == '0') ) ) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( ((history[ts_TCS.p]-history[ts_TCS.z]) != 1) || (p0[ts_TCS.p] == '0') ) ))) && ((ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_TCS.p] == '0') &&! (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_TCS.p] == '1') && (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) )))))
+		if((ts_TCS.ts_Control.autState == ControlExecution && (((ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState == S0 && ((clock[ts_TCS.p] == '1') && (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState == S0 && ((clock[ts_TCS.p] == '0') &&! (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) )) || (((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (clock[ts_TCS.p] == '0') ) ) || (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (clock[ts_TCS.z] == '0') ) )) || ((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_iUr.autState == S0 && ( (clock[ts_TCS.z]-'0') == ((clock[ts_TCS.r]-'0')+(clock[ts_TCS.i]-'0')) ) ) || ((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_exclusion.autState == S0 && ((clock[ts_TCS.i] == '0') || (clock[ts_TCS.r] == '0')) ) || ((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.counter != 0) || (clock[ts_TCS.r] == '0') ) ) || (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.counter != 2) || (clock[ts_TCS.i] == '0') ) ))))))))
 		{
-			if(((((((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState == S0 && ( ((history[ts_TCS.i]-history[ts_TCS.r]) != 2) || (p0[ts_TCS.i] == '0') ) ) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState == S0 && ( ((history[ts_TCS.r]-history[ts_TCS.i]) != 0) || (p0[ts_TCS.r] == '0') ) )) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_exclusion.autState == S0 && ((p0[ts_TCS.i] == '0') || (p0[ts_TCS.r] == '0')) )) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_iUr.autState == S0 && ( (p0[ts_TCS.z]-'0') == ((p0[ts_TCS.r]-'0')+(p0[ts_TCS.i]-'0')) ) )) && ((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( ((history[ts_TCS.z]-history[ts_TCS.p]) != 0) || (p0[ts_TCS.z] == '0') ) ) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( ((history[ts_TCS.p]-history[ts_TCS.z]) != 1) || (p0[ts_TCS.p] == '0') ) ))) && ((ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_TCS.p] == '0') &&! (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_TCS.p] == '1') && (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ))))
+			if(((ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState == S0 && ((clock[ts_TCS.p] == '1') && (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState == S0 && ((clock[ts_TCS.p] == '0') &&! (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) )))
 			{
-				if((((((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState == S0 && ( ((history[ts_TCS.i]-history[ts_TCS.r]) != 2) || (p0[ts_TCS.i] == '0') ) ) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState == S0 && ( ((history[ts_TCS.r]-history[ts_TCS.i]) != 0) || (p0[ts_TCS.r] == '0') ) )) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_exclusion.autState == S0 && ((p0[ts_TCS.i] == '0') || (p0[ts_TCS.r] == '0')) )) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_iUr.autState == S0 && ( (p0[ts_TCS.z]-'0') == ((p0[ts_TCS.r]-'0')+(p0[ts_TCS.i]-'0')) ) )) && ((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( ((history[ts_TCS.z]-history[ts_TCS.p]) != 0) || (p0[ts_TCS.z] == '0') ) ) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( ((history[ts_TCS.p]-history[ts_TCS.z]) != 1) || (p0[ts_TCS.p] == '0') ) ))))
+				if((ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState == S0 && ((clock[ts_TCS.p] == '1') && (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ))
 				{
-					if(((((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState == S0 && ( ((history[ts_TCS.i]-history[ts_TCS.r]) != 2) || (p0[ts_TCS.i] == '0') ) ) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState == S0 && ( ((history[ts_TCS.r]-history[ts_TCS.i]) != 0) || (p0[ts_TCS.r] == '0') ) )) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_exclusion.autState == S0 && ((p0[ts_TCS.i] == '0') || (p0[ts_TCS.r] == '0')) )) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_iUr.autState == S0 && ( (p0[ts_TCS.z]-'0') == ((p0[ts_TCS.r]-'0')+(p0[ts_TCS.i]-'0')) ) )))
+					ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_timer.reset_clock(current_time);ts_TCS.ts_Control.ts_ControlExecution.left_clock_P_discretizedBy_10.reset_clock(current_time);ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState = S0;
+					exec = 1;
+				
+				}else if((ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState == S0 && ((clock[ts_TCS.p] == '0') &&! (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ))
+				{
+					ts_TCS.ts_Control.ts_ControlExecution.left_clock_P_discretizedBy_10.reset_clock(current_time);ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState = S0;
+					exec = 1;
+				
+				}
+				std::cout<<"\nControl mode action execution\n";
+			}else if((((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (clock[ts_TCS.p] == '0') ) ) || (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (clock[ts_TCS.z] == '0') ) )) || ((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_iUr.autState == S0 && ( (clock[ts_TCS.z]-'0') == ((clock[ts_TCS.r]-'0')+(clock[ts_TCS.i]-'0')) ) ) || ((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_exclusion.autState == S0 && ((clock[ts_TCS.i] == '0') || (clock[ts_TCS.r] == '0')) ) || ((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.counter != 0) || (clock[ts_TCS.r] == '0') ) ) || (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.counter != 2) || (clock[ts_TCS.i] == '0') ) ))))))
+			{
+				if(((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (clock[ts_TCS.p] == '0') ) ) || (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (clock[ts_TCS.z] == '0') ) )))
+				{
+					if((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (clock[ts_TCS.p] == '0') ) ))
 					{
-						if((((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState == S0 && ( ((history[ts_TCS.i]-history[ts_TCS.r]) != 2) || (p0[ts_TCS.i] == '0') ) ) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState == S0 && ( ((history[ts_TCS.r]-history[ts_TCS.i]) != 0) || (p0[ts_TCS.r] == '0') ) )) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_exclusion.autState == S0 && ((p0[ts_TCS.i] == '0') || (p0[ts_TCS.r] == '0')) )))
+						if((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (clock[ts_TCS.p] == '0') ) ))
 						{
-							if(((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState == S0 && ( ((history[ts_TCS.i]-history[ts_TCS.r]) != 2) || (p0[ts_TCS.i] == '0') ) ) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState == S0 && ( ((history[ts_TCS.r]-history[ts_TCS.i]) != 0) || (p0[ts_TCS.r] == '0') ) )))
+							clockCounterDiff(ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.counter,ts_TCS.p,ts_TCS.z,clock);ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.left_clock_Z_precede_P.reset_clock(current_time);ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.autState = S0;
+							exec = 1;
+						
+						}
+						ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.left_clock_P_alternateWith_Z.reset_clock(current_time);
+					}else if((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (clock[ts_TCS.z] == '0') ) ))
+					{
+						if((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (clock[ts_TCS.z] == '0') ) ))
+						{
+							clockCounterDiff(ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.counter,ts_TCS.z,ts_TCS.p,clock);ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.right_clock_P_precede_Z.reset_clock(current_time);ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.autState = S0;
+							exec = 1;
+						
+						}
+						ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.left_clock_P_alternateWith_Z.reset_clock(current_time);
+					}
+					ts_TCS.ts_Control.ts_ControlExecution.right_clock_TCS4.reset_clock(current_time);
+				}else if(((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_iUr.autState == S0 && ( (clock[ts_TCS.z]-'0') == ((clock[ts_TCS.r]-'0')+(clock[ts_TCS.i]-'0')) ) ) || ((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_exclusion.autState == S0 && ((clock[ts_TCS.i] == '0') || (clock[ts_TCS.r] == '0')) ) || ((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.counter != 0) || (clock[ts_TCS.r] == '0') ) ) || (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.counter != 2) || (clock[ts_TCS.i] == '0') ) )))))
+				{
+					if((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_iUr.autState == S0 && ( (clock[ts_TCS.z]-'0') == ((clock[ts_TCS.r]-'0')+(clock[ts_TCS.i]-'0')) ) ))
+					{
+						if((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_iUr.autState == S0 && ( (clock[ts_TCS.z]-'0') == ((clock[ts_TCS.r]-'0')+(clock[ts_TCS.i]-'0')) ) ))
+						{
+							ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.left_clock_iUr.reset_clock(current_time);ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_iUr.autState = S0;
+							exec = 1;
+						
+						}
+						ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.right_clock_T1.reset_clock(current_time);
+					}else if(((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_exclusion.autState == S0 && ((clock[ts_TCS.i] == '0') || (clock[ts_TCS.r] == '0')) ) || ((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.counter != 0) || (clock[ts_TCS.r] == '0') ) ) || (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.counter != 2) || (clock[ts_TCS.i] == '0') ) ))))
+					{
+						if((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_exclusion.autState == S0 && ((clock[ts_TCS.i] == '0') || (clock[ts_TCS.r] == '0')) ))
+						{
+							if((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_exclusion.autState == S0 && ((clock[ts_TCS.i] == '0') || (clock[ts_TCS.r] == '0')) ))
 							{
-								if((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState == S0 && ( ((history[ts_TCS.i]-history[ts_TCS.r]) != 2) || (p0[ts_TCS.i] == '0') ) ))
-								{
-									ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.left_clock_r_precede_i.reset_clock(current_time);ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState = S0;
-									exec = 1;
-								
-								}
-								if((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState == S0 && ( ((history[ts_TCS.r]-history[ts_TCS.i]) != 0) || (p0[ts_TCS.r] == '0') ) ))
-								{
-									
-									updateHistory(history,p0);
-									;ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.right_clock_IbeforeR.reset_clock(current_time);ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState = S0;
-									exec = 1;
-								
-								}
-								ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.left_clock_i_alternatesWith_r.reset_clock(current_time);
-							}
-							if((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_exclusion.autState == S0 && ((p0[ts_TCS.i] == '0') || (p0[ts_TCS.r] == '0')) ))
-							{
-								ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.right_clock_exclusion.reset_clock(current_time);ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_exclusion.autState = S0;
+								ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.left_clock_exclusion.reset_clock(current_time);ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_exclusion.autState = S0;
 								exec = 1;
 							
 							}
-							ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.left_clock_InsertOrRemoveRod.reset_clock(current_time);
-						}
-						if((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_iUr.autState == S0 && ( (p0[ts_TCS.z]-'0') == ((p0[ts_TCS.r]-'0')+(p0[ts_TCS.i]-'0')) ) ))
+							ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.right_clock_InsertOrRemoveRod.reset_clock(current_time);
+						}else if(((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.counter != 0) || (clock[ts_TCS.r] == '0') ) ) || (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.counter != 2) || (clock[ts_TCS.i] == '0') ) )))
 						{
-							ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.right_clock_iUr.reset_clock(current_time);ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_iUr.autState = S0;
-							exec = 1;
-						
+							if((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.counter != 0) || (clock[ts_TCS.r] == '0') ) ))
+							{
+								if((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.counter != 0) || (clock[ts_TCS.r] == '0') ) ))
+								{
+									clockCounterDiff(ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.counter,ts_TCS.r,ts_TCS.i,clock);ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.left_clock_IbeforeR.reset_clock(current_time);ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_IbeforeR.autState = S0;
+									exec = 1;
+								
+								}
+								ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.right_clock_i_alternatesWith_r.reset_clock(current_time);
+							}else if((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.counter != 2) || (clock[ts_TCS.i] == '0') ) ))
+							{
+								if((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState == S0 && ( (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.counter != 2) || (clock[ts_TCS.i] == '0') ) ))
+								{
+									clockCounterDiff(ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.counter,ts_TCS.i,ts_TCS.r,clock);ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.right_clock_r_precede_i.reset_clock(current_time);ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.ts_i_alternatesWith_r.ts_r_precede_i.autState = S0;
+									exec = 1;
+								
+								}
+								ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.ts_InsertOrRemoveRod.right_clock_i_alternatesWith_r.reset_clock(current_time);
+							}
+							ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_T1.right_clock_InsertOrRemoveRod.reset_clock(current_time);
 						}
-						ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.left_clock_T1.reset_clock(current_time);
+						ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.right_clock_T1.reset_clock(current_time);
 					}
-					if(((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( ((history[ts_TCS.z]-history[ts_TCS.p]) != 0) || (p0[ts_TCS.z] == '0') ) ) && (ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( ((history[ts_TCS.p]-history[ts_TCS.z]) != 1) || (p0[ts_TCS.p] == '0') ) )))
-					{
-						if((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( ((history[ts_TCS.z]-history[ts_TCS.p]) != 0) || (p0[ts_TCS.z] == '0') ) ))
-						{
-							ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.left_clock_P_precede_Z.reset_clock(current_time);ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_P_precede_Z.autState = S0;
-							exec = 1;
-						
-						}
-						if((ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( ((history[ts_TCS.p]-history[ts_TCS.z]) != 1) || (p0[ts_TCS.p] == '0') ) ))
-						{
-							ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.right_clock_Z_precede_P.reset_clock(current_time);ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.ts_P_alternateWith_Z.ts_Z_precede_P.autState = S0;
-							exec = 1;
-						
-						}
-						ts_TCS.ts_Control.ts_ControlExecution.ts_TCS4.right_clock_P_alternateWith_Z.reset_clock(current_time);
-					}
-					ts_TCS.ts_Control.ts_ControlExecution.left_clock_TCS4.reset_clock(current_time);
-				}
-				if((ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_TCS.p] == '0') &&! (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ))
-				{
-					ts_TCS.ts_Control.ts_ControlExecution.right_clock_P_discretizedBy_10.reset_clock(current_time);ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState = S0;
-					exec = 1;
-				
-				}else if((ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_TCS.p] == '1') && (ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ))
-				{
-					ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.periodic_sense_timer.reset_clock(current_time);ts_TCS.ts_Control.ts_ControlExecution.right_clock_P_discretizedBy_10.reset_clock(current_time);ts_TCS.ts_Control.ts_ControlExecution.ts_P_discretizedBy_10.autState = S0;
-					exec = 1;
-				
+					ts_TCS.ts_Control.ts_ControlExecution.right_clock_TCS4.reset_clock(current_time);
 				}
 				std::cout<<"\nControl mode action execution\n";
 			}
 		
 		}
 	
-	}else if((ts_TCS.autState == diagnostic && (((ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( ((history[ts_TCS.d]-history[ts_TCS.c]) != 1) || (p0[ts_TCS.d] == '0') ) ) && (ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ( ((history[ts_TCS.c]-history[ts_TCS.d]) != 0) || (p0[ts_TCS.c] == '0') ) )) && (ts_TCS.ts_diagnostic.ts_S_subclock_C.autState == S0 && ((p0[ts_TCS.s] == '0') || (p0[ts_TCS.c] == '1')) ))))
+	}else if((ts_TCS.autState == diagnostic && (((ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ( (ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (clock[ts_TCS.c] == '0') ) ) && (ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (clock[ts_TCS.d] == '0') ) )) && (ts_TCS.ts_diagnostic.ts_S_subclock_C.autState == S0 && ((clock[ts_TCS.s] == '0') || (clock[ts_TCS.c] == '1')) ))))
 	{
-		if((((ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( ((history[ts_TCS.d]-history[ts_TCS.c]) != 1) || (p0[ts_TCS.d] == '0') ) ) && (ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ( ((history[ts_TCS.c]-history[ts_TCS.d]) != 0) || (p0[ts_TCS.c] == '0') ) )) && (ts_TCS.ts_diagnostic.ts_S_subclock_C.autState == S0 && ((p0[ts_TCS.s] == '0') || (p0[ts_TCS.c] == '1')) )))
+		if((((ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ( (ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (clock[ts_TCS.c] == '0') ) ) && (ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (clock[ts_TCS.d] == '0') ) )) && (ts_TCS.ts_diagnostic.ts_S_subclock_C.autState == S0 && ((clock[ts_TCS.s] == '0') || (clock[ts_TCS.c] == '1')) )))
 		{
-			if(((ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( ((history[ts_TCS.d]-history[ts_TCS.c]) != 1) || (p0[ts_TCS.d] == '0') ) ) && (ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ( ((history[ts_TCS.c]-history[ts_TCS.d]) != 0) || (p0[ts_TCS.c] == '0') ) )))
+			if(((ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ( (ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (clock[ts_TCS.c] == '0') ) ) && (ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (clock[ts_TCS.d] == '0') ) )))
 			{
-				if((ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( ((history[ts_TCS.d]-history[ts_TCS.c]) != 1) || (p0[ts_TCS.d] == '0') ) ))
+				if((ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ( (ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (clock[ts_TCS.c] == '0') ) ))
 				{
-					ts_TCS.ts_diagnostic.ts_D_alternateWith_C.left_clock_C_precede_D.reset_clock(current_time);ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.autState = S0;
+					clockCounterDiff(ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_D_precede_C.counter,ts_TCS.c,ts_TCS.d,clock);ts_TCS.ts_diagnostic.ts_D_alternateWith_C.left_clock_D_precede_C.reset_clock(current_time);ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_D_precede_C.autState = S0;
 					exec = 1;
 				
 				}
-				if((ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ( ((history[ts_TCS.c]-history[ts_TCS.d]) != 0) || (p0[ts_TCS.c] == '0') ) ))
+				if((ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (clock[ts_TCS.d] == '0') ) ))
 				{
-					ts_TCS.ts_diagnostic.ts_D_alternateWith_C.right_clock_D_precede_C.reset_clock(current_time);ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_D_precede_C.autState = S0;
+					clockCounterDiff(ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.counter,ts_TCS.d,ts_TCS.c,clock);ts_TCS.ts_diagnostic.ts_D_alternateWith_C.right_clock_C_precede_D.reset_clock(current_time);ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.autState = S0;
 					exec = 1;
 				
 				}
 				ts_TCS.ts_diagnostic.left_clock_D_alternateWith_C.reset_clock(current_time);
 			}
-			if((ts_TCS.ts_diagnostic.ts_S_subclock_C.autState == S0 && ((p0[ts_TCS.s] == '0') || (p0[ts_TCS.c] == '1')) ))
+			if((ts_TCS.ts_diagnostic.ts_S_subclock_C.autState == S0 && ((clock[ts_TCS.s] == '0') || (clock[ts_TCS.c] == '1')) ))
 			{
-				updateHistory(history,p0);ts_TCS.ts_diagnostic.right_clock_S_subclock_C.reset_clock(current_time);ts_TCS.ts_diagnostic.ts_S_subclock_C.autState = S0;
+				ts_TCS.ts_diagnostic.right_clock_S_subclock_C.reset_clock(current_time);ts_TCS.ts_diagnostic.ts_S_subclock_C.autState = S0;
 				exec = 1;
 			
 			}
@@ -325,10 +350,10 @@ int    e(std::string   p0)
 
 }
 
-int    backToDiagnostic(int  p0)
+int    backToDiagnostic(int  temp)
 {
 	int  exec = 0;
-	if((ts_TCS.autState == Control && ts_TCS.MIN < p0 < ts_TCS.MAX ))
+	if((ts_TCS.autState == Control && ts_TCS.MIN < temp < ts_TCS.MAX ))
 	{
 		
 		std::cout<<"\nBack to diagnostic mode\n";
@@ -339,10 +364,12 @@ int    backToDiagnostic(int  p0)
 		;ts_TCS.autState = diagnostic;
 		ts_TCS.ts_diagnostic.left_clock_D_alternateWith_C.reset_clock(last_event_time);
 		ts_TCS.ts_diagnostic.right_clock_S_subclock_C.reset_clock(last_event_time);
-		ts_TCS.ts_diagnostic.ts_D_alternateWith_C.right_clock_D_precede_C.reset_clock(last_event_time);
-		ts_TCS.ts_diagnostic.ts_D_alternateWith_C.left_clock_C_precede_D.reset_clock(last_event_time);
-		ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.autState = S0;
+		ts_TCS.ts_diagnostic.ts_D_alternateWith_C.right_clock_C_precede_D.reset_clock(last_event_time);
+		ts_TCS.ts_diagnostic.ts_D_alternateWith_C.left_clock_D_precede_C.reset_clock(last_event_time);
 		ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_D_precede_C.autState = S0;
+		ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_D_precede_C.counter = 0;
+		ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.autState = S0;
+		ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.counter = 0;
 		ts_TCS.ts_diagnostic.ts_S_subclock_C.autState = S0;
 		exec = 1;
 	
@@ -373,10 +400,12 @@ int main(int argc, char** argv)
 	ts_TCS.p = p;
 	ts_TCS.ts_diagnostic.left_clock_D_alternateWith_C.reset_clock(current_time);
 	ts_TCS.ts_diagnostic.right_clock_S_subclock_C.reset_clock(current_time);
-	ts_TCS.ts_diagnostic.ts_D_alternateWith_C.right_clock_D_precede_C.reset_clock(current_time);
-	ts_TCS.ts_diagnostic.ts_D_alternateWith_C.left_clock_C_precede_D.reset_clock(current_time);
-	ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.autState = S0;
+	ts_TCS.ts_diagnostic.ts_D_alternateWith_C.right_clock_C_precede_D.reset_clock(current_time);
+	ts_TCS.ts_diagnostic.ts_D_alternateWith_C.left_clock_D_precede_C.reset_clock(current_time);
 	ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_D_precede_C.autState = S0;
+	ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_D_precede_C.counter = 0;
+	ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.autState = S0;
+	ts_TCS.ts_diagnostic.ts_D_alternateWith_C.ts_C_precede_D.counter = 0;
 	ts_TCS.ts_diagnostic.ts_S_subclock_C.autState = S0;
 	while (1)
 	{
@@ -390,61 +419,26 @@ int main(int argc, char** argv)
 			if(Step())
 			{
 				continue;
+			}
+		}else if(_evt.label.compare("e") == 0)
+		{
+			if(e(Types::get_str(_evt.params[0])))
+			{
+				continue;
 			}else 
 			{
 				ERROR_2;
 			
 			}
 		
-		}else if(_evt.label.compare("e") == 0)
-		{
-			bool  flag = 0;
-			if(_evt.params.size() == 1)
-			{
-				std::string   p0;
-				p0 = Types::get_str(_evt.params[0]);
-				if((!(flag) && e(p0)))
-				{
-					continue;
-				}else if(flag)
-				{
-					ERROR_6;
-				
-				}else 
-				{
-					ERROR_2;
-				
-				}
-			
-			}else 
-			{
-				ERROR_7;
-			
-			}
-		
 		}else if(_evt.label.compare("backToDiagnostic") == 0)
 		{
-			bool  flag = 0;
-			if(_evt.params.size() == 1)
+			if(backToDiagnostic(Types::get_int(_evt.params[0])))
 			{
-				int  p0;
-				p0 = Types::get_int(_evt.params[0], flag);
-				if((!(flag) && backToDiagnostic(p0)))
-				{
-					continue;
-				}else if(flag)
-				{
-					ERROR_6;
-				
-				}else 
-				{
-					ERROR_2;
-				
-				}
-			
+				continue;
 			}else 
 			{
-				ERROR_7;
+				ERROR_2;
 			
 			}
 		
@@ -458,8 +452,7 @@ int main(int argc, char** argv)
 				}
 			}
 			else{
-				bool flag = 0;
-				long int numberOfSteps = advanceToV2(current_time, step_time, Types::get_str(_evt.params[0]), (std::time_t) Types::get_double(_evt.params[1], flag));
+				long int numberOfSteps = advanceToV2(current_time, step_time, Types::get_str(_evt.params[0]), (std::time_t) Types::get_double(_evt.params[1]));
 				while (numberOfSteps > 0)
 				{
 					Step();
@@ -476,8 +469,7 @@ int main(int argc, char** argv)
 				}
 			}
 			else{
-				bool flag = 0;
-				long int numberOfSteps = advanceOfV2(step_time, Types::get_str(_evt.params[0]), (std::time_t) Types::get_double(_evt.params[1], flag));
+				long int numberOfSteps = advanceOfV2(step_time, Types::get_str(_evt.params[0]), (std::time_t) Types::get_double(_evt.params[1]));
 				while (numberOfSteps > 0)
 				{
 					Step();

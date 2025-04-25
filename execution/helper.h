@@ -7,17 +7,13 @@
 #include <vector>
 #include <map>
 #include <getopt.h>
-#include <stdexcept>
-#include <string>
-#include <iomanip>
 
 /*
  * @brief Regex expresssion used to parse
  *            event labels and parameters 
  */
-#define LABEL_REGEX std::string("([0-9a-zA-Z*+_]*)")
+#define LABEL_REGEX std::string("([a-z_A-z]+[0-9]*)")
 #define PARAMS_REGEX std::string(LABEL_REGEX + "\\((.*)\\)")
-#define SEPARATE_PARAMS_REGEX std::string("(\".*?\"|[^\",]+)(?=\\s*,|\\s*$)")
 /*
  * @brief Safely executes events by catching exceptions
  *     
@@ -25,8 +21,6 @@
 #define ERROR_1 std::cout << "Event is not recognized" << "\n"
 #define ERROR_2 std::cout << "Event is not executable" << "\n"
 #define ERROR_5 std::cout << "Empty event label, terminating execution" << "\n"
-#define ERROR_6 std::cout << "Wrong parameters type given" << "\n";
-#define ERROR_7 std::cout << "Wrong number of parameters given" << "\n";
 
 /*
  * @brief An object used to serialize types and get the appropriated values as of
@@ -36,38 +30,10 @@ class Types {
     
  public:
     
-    static std::string get_str(const std::string s) { 
-        return s; 
-    }
-    static int get_int(const std::string s, bool& flag) {
-        std::istringstream iss(s);
-        int temp;
-        char c;
-        if (!(iss >> temp) || (iss.get(c))){
-            std::cerr << "Error: Failed to convert string to int: " << s << std::endl;
-            flag = true;
-            return 0;
-        }
-        return temp;
-    }
-    static float get_float(const std::string s, bool& flag) {
-        try {
-            return std::stof(s);
-        } catch(const std::exception& e) {
-            std::cerr << "Error: Failed to convert string to float: " << e.what() << std::endl;
-            flag = true;
-            return 0.0f; // Return only to allow program to continue
-        }
-    }
-    static double get_double(const std::string s, bool& flag) {
-        try {
-            return std::stod(s);
-        } catch(const std::exception& e) {
-            std::cerr << "Error: Failed to convert string to double: " << e.what() << std::endl;
-            flag = true;
-            return 0.0; // Return only to allow program to continue
-        }
-    }
+    static std::string get_str(const std::string s) { return s; }
+    static int get_int(const std::string s) { return std::stoi(s); }
+    static float get_float(const std::string s) { return std::stof(s); }
+    static double get_double(const std::string s) { return std::stod(s); }
     static bool get_bool(const std::string s) { 
         if(s == "0" || s == "false"){
             return false;
@@ -94,13 +60,6 @@ struct Event
 
 int MAX;
 int MIN;
-int d;
-int c;
-int s;
-int p;
-int i;
-int r;
-int z;
 
 class IO
 {
@@ -112,23 +71,18 @@ public:
      * @param The input regex to be used for parsing
      * @return 
      */
-    static void get_event_params(Event& e, const std::string in) 
+    static void get_event_params(Event& e, const std::string in, const std::regex regex) 
     {
         std::smatch matches;
-        std::smatch matches2;
-        if(regex_search(in, matches, std::regex(PARAMS_REGEX))) 
+        if(regex_search(in, matches, regex)) 
         {
-            std::string ss = matches.str(2);
-	        while(regex_search(ss, matches2, std::regex(SEPARATE_PARAMS_REGEX))){
-                std::string input = matches2[0];
-                std::stringstream ss2(input);
-
-                std::string output;
-                ss2 >> std::quoted(output);
-
-                e.params.push_back(output);
-                ss = matches2.suffix().str();
-            }
+            std::stringstream ss(matches.str(2));
+	    while(ss.good()) 
+	    { 
+	        std::string it; 
+	        getline(ss, it, ',');
+	        e.params.push_back(it); 
+	    }
         }
   
         return;   
@@ -156,18 +110,11 @@ public:
 
     static void configInputStream(int argc, char** argv) 
     {
-        const char* const short_opts = "i:1:2:3:4:5:6:7:8:9:h";
+        const char* const short_opts = "i:1:2:h";
 
         const option long_opts[] = {
             {"MAX", required_argument, nullptr, '1'},
             {"MIN", required_argument, nullptr, '2'},
-            {"d", required_argument, nullptr, '3'},
-            {"c", required_argument, nullptr, '4'},
-            {"s", required_argument, nullptr, '5'},
-            {"p", required_argument, nullptr, '6'},
-            {"i", required_argument, nullptr, '7'},
-            {"r", required_argument, nullptr, '8'},
-            {"z", required_argument, nullptr, '9'},
         };
 
         while (true)
@@ -189,112 +136,21 @@ public:
              }
              
              case '1': 
-             {
-                 
-                 bool flag = false;
-                 MAX = Types::get_int(optarg, flag);  
-                 if(flag){
-                      ERROR_6;
-                 }
+                 MAX = Types::get_int(optarg); 
                  break;
-             }
              case '2': 
-             {
-                 
-                 bool flag = false;
-                 MIN = Types::get_int(optarg, flag);  
-                 if(flag){
-                      ERROR_6;
-                 }
+                 MIN = Types::get_int(optarg); 
                  break;
-             }
-             case '3': 
-             {
-                 
-                 bool flag = false;
-                 d = Types::get_int(optarg, flag);  
-                 if(flag){
-                      ERROR_6;
-                 }
-                 break;
-             }
-             case '4': 
-             {
-                 
-                 bool flag = false;
-                 c = Types::get_int(optarg, flag);  
-                 if(flag){
-                      ERROR_6;
-                 }
-                 break;
-             }
-             case '5': 
-             {
-                 
-                 bool flag = false;
-                 s = Types::get_int(optarg, flag);  
-                 if(flag){
-                      ERROR_6;
-                 }
-                 break;
-             }
-             case '6': 
-             {
-                 
-                 bool flag = false;
-                 p = Types::get_int(optarg, flag);  
-                 if(flag){
-                      ERROR_6;
-                 }
-                 break;
-             }
-             case '7': 
-             {
-                 
-                 bool flag = false;
-                 i = Types::get_int(optarg, flag);  
-                 if(flag){
-                      ERROR_6;
-                 }
-                 break;
-             }
-             case '8': 
-             {
-                 
-                 bool flag = false;
-                 r = Types::get_int(optarg, flag);  
-                 if(flag){
-                      ERROR_6;
-                 }
-                 break;
-             }
-             case '9': 
-             {
-                 
-                 bool flag = false;
-                 z = Types::get_int(optarg, flag);  
-                 if(flag){
-                      ERROR_6;
-                 }
-                 break;
-             }
              case 'h':
              { 
                  std::cout << "This program has been compiled by cASTD." << "\n";
-                 std::cout << "./my_program [-i <event file>] [-MAX <value>] [-MIN <value>] [-d <value>] [-c <value>] [-s <value>] [-p <value>] [-i <value>] [-r <value>] [-z <value>]  [-h]" << "\n";
+                 std::cout << "./my_program [-i <event file>] [-MAX <value>] [-MIN <value>]  [-h]" << "\n";
                  std::cout << "[OPTIONS]     								     " << "\n";
                  std::cout << "   -i <event  file>  Read an event file in Shorthand format." << "\n";
                  std::cout << "                     If an event file is not given, it runs in interactive" << "\n";
                  std::cout << "                     mode from command line" << "\n";
                     std::cout << "   -MAX <value> Parameter of the ASTD" << std::endl;
                     std::cout << "   -MIN <value> Parameter of the ASTD" << std::endl;
-                    std::cout << "   -d <value> Parameter of the ASTD" << std::endl;
-                    std::cout << "   -c <value> Parameter of the ASTD" << std::endl;
-                    std::cout << "   -s <value> Parameter of the ASTD" << std::endl;
-                    std::cout << "   -p <value> Parameter of the ASTD" << std::endl;
-                    std::cout << "   -i <value> Parameter of the ASTD" << std::endl;
-                    std::cout << "   -r <value> Parameter of the ASTD" << std::endl;
-                    std::cout << "   -z <value> Parameter of the ASTD" << std::endl;
                  
                  
                  
@@ -316,17 +172,18 @@ public:
         if(argc > 1) 
         {
             if(!filename.empty()) 
-	            std::getline(channel, input); 
-	        else 
-	            std::getline(std::cin, input);
-    	    e.label = get_event_label(input);
-	        get_event_params(e, input);  
+	        std::getline(channel, input); 
+	    else 
+	        std::getline(std::cin, input); 
+
+	    e.label = get_event_label(input);
+	    get_event_params(e, input, std::regex(PARAMS_REGEX));  
         }
         else 
         {
             getline(std::cin, input);
             e.label = get_event_label(input);
-            get_event_params(e, input);
+            get_event_params(e, input, std::regex(PARAMS_REGEX));
         }
      
         return e;

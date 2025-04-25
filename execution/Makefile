@@ -1,16 +1,16 @@
-TARGET = tcs
+TARGET = tcs_observer
 CC = g++
-CFLAGS = -std=c++14 -g -w -O1
+CFLAGS = -std=c++11 -g -Wall -O1
 
 .PHONY: default all clean
 default: $(TARGET)
 all: default
 
 HEADERS = *.h
-OBJECTS = tcs.o
+OBJECTS = tcs_observer.o
 
-%.o: ..\Ccsl translation\delayForModule.cpp utils.cpp tcs.cpp $(HEADERS)
-	$(CC) $(CFLAGS) -c ..\Ccsl translation\delayForModule.cpp utils.cpp tcs.cpp
+%.o: %.cpp $(HEADERS)
+	$(CC) $(CFLAGS) -c $< 
 
 .PRECIOUS: $(TARGET) $(OBJECTS)
 
@@ -18,8 +18,8 @@ $(TARGET): $(OBJECTS)
 	$(CC) $(OBJECTS) -o $@
 
 clean: 
-	-del /F /Q *.o 2>nul
-	-del /F /Q *.h 2>nul
-	-del /F /Q *.hpp 2>nul
-	-del /F /Q  ..\Ccsl translation\delayForModule.cpp utils.cpp*.cpp 2>nul
-	-del /F /Q $(TARGET).exe 2>nul
+	-rm -f *.o
+	-rm -f $(filter-out,$(wildcard *.h))
+	-rm -f $(filter-out,$(wildcard *.hpp))
+	-rm -f $(filter-out utils.cpp,$(wildcard *.cpp))
+	-rm -f $(TARGET)
