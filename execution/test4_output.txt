@@ -1,4 +1,3 @@
-
 Diagnostic mode action execution
 
 Diagnostic mode action execution
@@ -9,8 +8,6 @@ Diagnostic mode action execution
 
 Diagnostic mode action execution
 
-Go to control mode
-
 Control mode action execution
 
 Control mode action execution
@@ -34,8 +31,6 @@ Control mode action execution
 Control mode action execution
 
 Control mode action execution
-
-Back to diagnostic mode
 
 Diagnostic mode action execution
 
@@ -46,8 +41,6 @@ Diagnostic mode action execution
 Diagnostic mode action execution
 
 Diagnostic mode action execution
-
-Go to control mode
 
 Control mode action execution
 
