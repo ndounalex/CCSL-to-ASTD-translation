@@ -145,7 +145,7 @@ vector<string> getAllTicks(char *filename)
 int main() {
     // std::vector<int> liste = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
     std::vector<string> diagnostic = getAllTicks("diagnostic_trace");
-    std::vector<string> control = getAllTicks("control_trace_old");
+    std::vector<string> control = getAllTicks("control_trace");
     selectionnerAleatoire(diagnostic, control);
 
     return 0;
