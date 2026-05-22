@@ -94,6 +94,13 @@ struct Event
 
 int max_temp;
 int min_temp;
+int d;
+int c;
+int s;
+int p;
+int i;
+int r;
+int z;
 
 class IO
 {
@@ -149,11 +156,18 @@ public:
 
     static void configInputStream(int argc, char** argv) 
     {
-        const char* const short_opts = "i:1:2:h";
+        const char* const short_opts = "i:1:2:3:4:5:6:7:8:9:h";
 
         const option long_opts[] = {
             {"max_temp", required_argument, nullptr, '1'},
             {"min_temp", required_argument, nullptr, '2'},
+            {"d", required_argument, nullptr, '3'},
+            {"c", required_argument, nullptr, '4'},
+            {"s", required_argument, nullptr, '5'},
+            {"p", required_argument, nullptr, '6'},
+            {"i", required_argument, nullptr, '7'},
+            {"r", required_argument, nullptr, '8'},
+            {"z", required_argument, nullptr, '9'},
         };
 
         while (true)
@@ -194,16 +208,93 @@ public:
                  }
                  break;
              }
+             case '3': 
+             {
+                 
+                 bool flag = false;
+                 d = Types::get_int(optarg, flag);  
+                 if(flag){
+                      ERROR_6;
+                 }
+                 break;
+             }
+             case '4': 
+             {
+                 
+                 bool flag = false;
+                 c = Types::get_int(optarg, flag);  
+                 if(flag){
+                      ERROR_6;
+                 }
+                 break;
+             }
+             case '5': 
+             {
+                 
+                 bool flag = false;
+                 s = Types::get_int(optarg, flag);  
+                 if(flag){
+                      ERROR_6;
+                 }
+                 break;
+             }
+             case '6': 
+             {
+                 
+                 bool flag = false;
+                 p = Types::get_int(optarg, flag);  
+                 if(flag){
+                      ERROR_6;
+                 }
+                 break;
+             }
+             case '7': 
+             {
+                 
+                 bool flag = false;
+                 i = Types::get_int(optarg, flag);  
+                 if(flag){
+                      ERROR_6;
+                 }
+                 break;
+             }
+             case '8': 
+             {
+                 
+                 bool flag = false;
+                 r = Types::get_int(optarg, flag);  
+                 if(flag){
+                      ERROR_6;
+                 }
+                 break;
+             }
+             case '9': 
+             {
+                 
+                 bool flag = false;
+                 z = Types::get_int(optarg, flag);  
+                 if(flag){
+                      ERROR_6;
+                 }
+                 break;
+             }
              case 'h':
              { 
                  std::cout << "This program has been compiled by cASTD." << "\n";
-                 std::cout << "./my_program [-i <event file>] [-max_temp <value>] [-min_temp <value>]  [-h]" << "\n";
+                 std::cout << "./my_program [-i <event file>] [-max_temp <value>] [-min_temp <value>] [-d <value>] [-c <value>] [-s <value>] [-p <value>] [-i <value>] [-r <value>] [-z <value>]  [-h]" << "\n";
                  std::cout << "[OPTIONS]     								     " << "\n";
                  std::cout << "   -i <event  file>  Read an event file in Shorthand format." << "\n";
                  std::cout << "                     If an event file is not given, it runs in interactive" << "\n";
                  std::cout << "                     mode from command line" << "\n";
                     std::cout << "   -max_temp <value> Parameter of the ASTD" << std::endl;
                     std::cout << "   -min_temp <value> Parameter of the ASTD" << std::endl;
+                    std::cout << "   -d <value> Parameter of the ASTD" << std::endl;
+                    std::cout << "   -c <value> Parameter of the ASTD" << std::endl;
+                    std::cout << "   -s <value> Parameter of the ASTD" << std::endl;
+                    std::cout << "   -p <value> Parameter of the ASTD" << std::endl;
+                    std::cout << "   -i <value> Parameter of the ASTD" << std::endl;
+                    std::cout << "   -r <value> Parameter of the ASTD" << std::endl;
+                    std::cout << "   -z <value> Parameter of the ASTD" << std::endl;
                  
                  
                  
