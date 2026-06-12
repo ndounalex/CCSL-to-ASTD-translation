@@ -1,0 +1,3 @@
+2 periodic_sense
+0 insert_rod
+1 remove_rod
