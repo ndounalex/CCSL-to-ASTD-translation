@@ -30,8 +30,8 @@ To validate our ASTD specification using our CCSL to ASTD translation, we've cre
 Compilation Command:
 * g++ -std=c++14 environment.cpp pugixml.cpp -o environment ./environment
 
-An example of a command to run test 1 could be:
-./tcs -1 200 -2 150 -3 0 -4 1 -5 2 -6 3 -7 4 -8 5 -9 6 -i test1.txt
+An example of a command to run environment could be:
+* ./environment diagnostic_trace diagnostic_clocks_index.txt control_trace control_clocks_index.txt --observer CCSL
 (compiled on linux)
 
 with parameters:
