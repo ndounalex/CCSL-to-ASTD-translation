@@ -98,9 +98,9 @@ bool selectionnerAleatoire(const std::vector<string>& diagnostic, const vector<s
     }
     while(k<control.size()){
         if(observerItem == "CCSL")addEvents(copyDiagnostic, control[k], controlEvents, observerItem);
-        addEvents(copyDiagnostic, control[k], controlEvents, observerItem);
-        // copyDiagnostic.push_back("schedule("+prefixClocks+control[k]+")");
-        if(observerItem == "CCSL")addEvents(copyDiagnostic, control[k], controlEvents, observerItem);
+        // addEvents(copyDiagnostic, control[k], controlEvents, observerItem);
+        copyDiagnostic.push_back("schedule("+prefixClocks+control[k]+")");
+        if(observerItem != "CCSL")addEvents(copyDiagnostic, control[k], controlEvents, observerItem);
         auto ft = find(selectedItemControl.begin(), selectedItemControl.end(), k+1);
         copyDiagnostic.push_back("advanceOf(sec,6)");
         k++;
