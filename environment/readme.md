@@ -1,5 +1,7 @@
 
 #g++ -std=c++14 environment.cpp pugixml.cpp -o environment
+#./environment diagnostic_trace diagnostic_clocks_index.txt control_trace control_clocks_index.txt
+
 ./environment
 
 # CCSL-to-ASTD-translation test case
