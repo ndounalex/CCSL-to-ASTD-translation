@@ -87,7 +87,7 @@ bool selectionnerAleatoire(const std::vector<string>& diagnostic, const vector<s
                 auto ft = find(selectedItemControl.begin(), selectedItemControl.end(), k+1);
                 copyDiagnostic.push_back("advanceOf(sec,6)");
                 k++;
-                if(ft!=selectedItemControl.end()){
+                if((ft!=selectedItemControl.end())||(k==control.size())){
                     copyDiagnostic.push_back("get_temperature(200)");
                     break;
                 }
