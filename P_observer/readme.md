@@ -1,2 +1,10 @@
+## Description
+This folder contains the specification of our observer-based system, representing the case where a TASTD specification is used to observe a specification resulting from a translation from CCSL to TASTD applied to our TCS case.
+* The file TCS_case_with_tastd_observer_p.eastd contains the specification of our observer-based system
+* The file verificationobserver.cpp contains the C++ file corresponding to our specification, generated from cASTD
+* The file inputs_3.txt contains a test case where there are no violations
+* The file inputs_4.txt contains a test case containing execution sequences that do not conform to the specifications and will trigger violations
+
+## Commands
 * valid input execution command: ./verification -1 300 -2 50 -3 0 -4 1 -5 2 -6 4 -7 6 -8 5 -9 7 -i inputs_3.txt
 * invalid input execution command: ./verification -1 300 -2 50 -3 0 -4 1 -5 2 -6 6 -7 4 -8 5 -9 8 -i inputs_4.txt
