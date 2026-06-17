@@ -15,6 +15,24 @@ enum AutState
   S1,
   S2
 };
+struct TState_TestObserver
+{
+  AutState  autState;
+
+};
+struct TState_Observer_3
+{
+  AutState  autState;
+
+};
+struct TState_Observer_Bloc_1
+{
+  Timer left_clock_Observer_3 = current_time;
+  Timer right_clock_TestObserver = current_time;
+  TState_Observer_3  ts_Observer_3;
+  TState_TestObserver  ts_TestObserver;
+
+};
 struct TState_Check2
 {
   AutState  autState;
@@ -33,7 +51,8 @@ struct TState_ControlExecutionGuard
 struct TState_ObserverControl
 {
   Timer periodic_timer  = current_time;
-  bool  violation;
+  int  nb_remove;
+  int  nb_insert;
   Timer left_clock_ControlExecutionGuard = current_time;
   Timer right_clock_Check2 = current_time;
   TState_ControlExecutionGuard  ts_ControlExecutionGuard;
@@ -63,10 +82,6 @@ struct TState_DiagnosticExecutionGuard
 };
 struct TState_ObserverDiagnostic
 {
-  bool  violation;
-  bool  withChange;
-  bool  status;
-  std::string   my_event;
   Timer left_clock_DiagnosticExecutionGuard = current_time;
   Timer right_clock_Check1 = current_time;
   TState_DiagnosticExecutionGuard  ts_DiagnosticExecutionGuard;
@@ -87,53 +102,23 @@ struct TState_Observer_Bloc_2
   TState_CallObserver_2  ts_CallObserver_2;
 
 };
-struct TState_TestObserver
-{
-  AutState  autState;
-
-};
-struct TState_Observer_3
-{
-  AutState  autState;
-
-};
-struct TState_Observer_Bloc_1
-{
-  Timer left_clock_Observer_3 = current_time;
-  Timer right_clock_TestObserver = current_time;
-  TState_Observer_3  ts_Observer_3;
-  TState_TestObserver  ts_TestObserver;
-
-};
 struct TState_Observers
 {
   float  temperature;
   int  obr_1;
+  Timer diagnostic_to_control_observer = current_time;
   int  obr_2;
-  Timer diagnostic_to_control = current_time;
   int  obr_3;
-  Timer right_clock_Observer_Bloc_2 = current_time;
-  Timer left_clock_Observer_Bloc_1 = current_time;
-  TState_Observer_Bloc_1  ts_Observer_Bloc_1;
+  Timer right_clock_Observer_Bloc_1 = current_time;
+  Timer left_clock_Observer_Bloc_2 = current_time;
   TState_Observer_Bloc_2  ts_Observer_Bloc_2;
+  TState_Observer_Bloc_1  ts_Observer_Bloc_1;
 
 };
 struct TState_CallObservers
 {
   CallState  callState;
   TState_Observers  ts_Observers;
-
-};
-struct TState_E2
-{
-  float  temperature;
-  AutState  autState;
-
-};
-struct TState_CallE2
-{
-  CallState  callState;
-  TState_E2  ts_E2;
 
 };
 struct TState_RprecedeI
@@ -271,7 +256,6 @@ struct TState_E1
 {
   int  nb_r;
   int  nb_i;
-  Timer diagnostic_to_control = current_time;
   Timer right_clock_ControGuard = current_time;
   Timer left_clock_DiagnosticGuard = current_time;
   TState_DiagnosticGuard  ts_DiagnosticGuard;
@@ -284,13 +268,25 @@ struct TState_CallE1
   TState_E1  ts_E1;
 
 };
+struct TState_E2
+{
+  float  temperature;
+  AutState  autState;
+
+};
+struct TState_CallE2
+{
+  CallState  callState;
+  TState_E2  ts_E2;
+
+};
 struct TState_Program
 {
   Timer diagnostic_to_control = current_time;
-  Timer left_clock_CallE1 = current_time;
-  Timer right_clock_CallE2 = current_time;
-  TState_CallE1  ts_CallE1;
+  Timer left_clock_CallE2 = current_time;
+  Timer right_clock_CallE1 = current_time;
   TState_CallE2  ts_CallE2;
+  TState_CallE1  ts_CallE1;
 
 };
 struct TState_CallObserver
@@ -302,20 +298,15 @@ struct TState_CallObserver
 struct TState_VerificationObserver
 {
   int  i;
-  float  temperature;
-  int  z;
-  int  max_temp;
-  Timer diagnostic_to_control = current_time;
-  int  p;
   int  r;
+  int  z;
   int  c;
   int  s;
   int  d;
-  bool  withChange;
   int  min_temp;
-  int  nb_remove;
+  int  max_temp;
   std::string   response;
-  int  nb_insert;
+  int  p;
   Timer left_clock_CallObserver = current_time;
   Timer right_clock_CallObservers = current_time;
   TState_CallObserver  ts_CallObserver;
@@ -323,47 +314,43 @@ struct TState_VerificationObserver
 
 };
 TState_VerificationObserver  ts_VerificationObserver;
-std::time_t  step_time = 1.0E9;
+std::time_t  step_time = 10000000;
 Timer  last_event_time = 0;
 
 int    Step()
 {
 	int  exec = 0;
 	current_time = step_time+current_time;
-	if(((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && S0 == S2)) || (ts_VerificationObserver.ts_CallObservers.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && S0 == S2)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))))))
+	if(((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)))) || (ts_VerificationObserver.ts_CallObservers.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))))))
 	{
-		if((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && S0 == S2)))
+		if((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)))))
 		{
 			ts_VerificationObserver.ts_CallObservers.callState = CALLED;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.temperature = 0;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1 = 0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2 = 0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3 = 0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.left_clock_Observer_3.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState = S0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState = NOTCALLED;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState = NOTCALLED;
-			if(((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && S0 == S2)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))))
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.left_clock_Observer_3.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState = S0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+			if(((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))))
 			{
-					if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && S0 == S2)))
+					if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)))
 					{
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState = CALLED;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.violation = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.withChange = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.status = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.my_event = " ";
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.right_clock_Check1.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S0;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState = S0;
-						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))
+						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))
 						{
 								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)
 								{
@@ -374,9 +361,9 @@ int    Step()
 								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(current_time);
 						}
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(current_time);
-					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)))
+					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)))
 					{
-						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))
+						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))
 						{
 								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)
 								{
@@ -390,7 +377,7 @@ int    Step()
 					}
 				if(exec)
 				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(current_time);
 				}
 			
 			}
@@ -414,22 +401,18 @@ int    Step()
 				;
 			}
 			ts_VerificationObserver.right_clock_CallObservers.reset_clock(current_time);
-		}else if((ts_VerificationObserver.ts_CallObservers.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && S0 == S2)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)))))
+		}else if((ts_VerificationObserver.ts_CallObservers.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)))))
 		{
-			if(((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && S0 == S2)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))))
+			if(((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))))
 			{
-					if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && S0 == S2)))
+					if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)))
 					{
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState = CALLED;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.violation = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.withChange = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.status = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.my_event = " ";
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.right_clock_Check1.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S0;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState = S0;
-						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))
+						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))
 						{
 								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)
 								{
@@ -440,9 +423,9 @@ int    Step()
 								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(current_time);
 						}
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(current_time);
-					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)))
+					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && (! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)))
 					{
-						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))
+						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))
 						{
 								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)
 								{
@@ -456,7 +439,7 @@ int    Step()
 					}
 				if(exec)
 				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(current_time);
 				}
 			
 			}
@@ -495,50 +478,36 @@ int    Step()
 int    status_update()
 {
 	int  exec = 0;
-	if((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.callState == CALLED && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0 || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))))))
+	if(((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.callState == CALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0))))
 	{
-		if(ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED)
+		if((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)))
 		{
 			ts_VerificationObserver.ts_CallObservers.callState = CALLED;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.temperature = 0;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1 = 0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2 = 0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3 = 0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.left_clock_Observer_3.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState = S0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState = NOTCALLED;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState = NOTCALLED;
-			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.left_clock_Observer_3.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState = S0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+			if(((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))))
 			{
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
-						exec = 1;
-				if(exec)
-				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(current_time);
-				}
-			
-			}
-			if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))))
-			{
-					if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED)
+					if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))
 					{
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState = CALLED;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.violation = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.withChange = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.status = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.my_event = " ";
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.right_clock_Check1.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S0;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState = S0;
-						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))
+						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))
 						{
 								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)
 								{
@@ -560,9 +529,9 @@ int    status_update()
 						
 						}
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(current_time);
-					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))
+					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))
 					{
-						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))
+						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))
 						{
 								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)
 								{
@@ -587,7 +556,17 @@ int    status_update()
 					}
 				if(exec)
 				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(current_time);
+				}
+			
+			}
+			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
+			{
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+						exec = 1;
+				if(exec)
+				{
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(current_time);
 				}
 			
 			}
@@ -611,32 +590,18 @@ int    status_update()
 				;
 			}
 			ts_VerificationObserver.right_clock_CallObservers.reset_clock(current_time);
-		}else if((ts_VerificationObserver.ts_CallObservers.callState == CALLED && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0 || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))))))
+		}else if((ts_VerificationObserver.ts_CallObservers.callState == CALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)))
 		{
-			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
+			if(((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))))
 			{
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
-						exec = 1;
-				if(exec)
-				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(current_time);
-				}
-			
-			}
-			if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))))
-			{
-					if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED)
+					if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))
 					{
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState = CALLED;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.violation = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.withChange = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.status = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.my_event = " ";
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.right_clock_Check1.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S0;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState = S0;
-						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))
+						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))
 						{
 								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)
 								{
@@ -658,9 +623,9 @@ int    status_update()
 						
 						}
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(current_time);
-					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))
+					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))
 					{
-						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))
+						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2))
 						{
 								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)
 								{
@@ -685,7 +650,17 @@ int    status_update()
 					}
 				if(exec)
 				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(current_time);
+				}
+			
+			}
+			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
+			{
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+						exec = 1;
+				if(exec)
+				{
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(current_time);
 				}
 			
 			}
@@ -724,54 +699,45 @@ int    status_update()
 int    remove_rod()
 {
 	int  exec = 0;
-	if((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.callState == CALLED && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0 || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_remove-ts_VerificationObserver.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))))))
+	if(((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.callState == CALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0))))
 	{
-		if(ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED)
+		if((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)))
 		{
 			ts_VerificationObserver.ts_CallObservers.callState = CALLED;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.temperature = 0;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1 = 0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2 = 0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3 = 0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.left_clock_Observer_3.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState = S0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState = NOTCALLED;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState = NOTCALLED;
-			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.left_clock_Observer_3.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState = S0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+			if(((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))))
 			{
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
-						exec = 1;
-				if(exec)
-				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(current_time);
-				}
-			
-			}
-			if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_remove-ts_VerificationObserver.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))))
-			{
-					if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED)
+					if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))
 					{
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState = CALLED;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer .reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.violation = true;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove = 0;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert = 0;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.left_clock_ControlExecutionGuard.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.right_clock_Check2.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState = S0;
-						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_remove-ts_VerificationObserver.nb_insert) != 0) )))
+						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )))
 						{
-								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_remove-ts_VerificationObserver.nb_insert) != 0) ))
+								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) ))
 								{
 									
-									ts_VerificationObserver.nb_remove++;
-									;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
+									ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove++;
+									;ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
 									exec = 1;
 								
 								}
@@ -789,15 +755,15 @@ int    remove_rod()
 						
 						}
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(current_time);
-					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_remove-ts_VerificationObserver.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))
+					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))
 					{
-						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_remove-ts_VerificationObserver.nb_insert) != 0) )))
+						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )))
 						{
-								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_remove-ts_VerificationObserver.nb_insert) != 0) ))
+								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) ))
 								{
 									
-									ts_VerificationObserver.nb_remove++;
-									;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
+									ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove++;
+									;ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
 									exec = 1;
 								
 								}
@@ -818,7 +784,17 @@ int    remove_rod()
 					}
 				if(exec)
 				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(current_time);
+				}
+			
+			}
+			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
+			{
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+						exec = 1;
+				if(exec)
+				{
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(current_time);
 				}
 			
 			}
@@ -842,36 +818,27 @@ int    remove_rod()
 				;
 			}
 			ts_VerificationObserver.right_clock_CallObservers.reset_clock(current_time);
-		}else if((ts_VerificationObserver.ts_CallObservers.callState == CALLED && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0 || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_remove-ts_VerificationObserver.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))))))
+		}else if((ts_VerificationObserver.ts_CallObservers.callState == CALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)))
 		{
-			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
+			if(((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))))
 			{
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
-						exec = 1;
-				if(exec)
-				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(current_time);
-				}
-			
-			}
-			if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_remove-ts_VerificationObserver.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))))
-			{
-					if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED)
+					if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))
 					{
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState = CALLED;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer .reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.violation = true;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove = 0;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert = 0;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.left_clock_ControlExecutionGuard.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.right_clock_Check2.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState = S0;
-						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_remove-ts_VerificationObserver.nb_insert) != 0) )))
+						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )))
 						{
-								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_remove-ts_VerificationObserver.nb_insert) != 0) ))
+								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) ))
 								{
 									
-									ts_VerificationObserver.nb_remove++;
-									;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
+									ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove++;
+									;ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
 									exec = 1;
 								
 								}
@@ -889,15 +856,15 @@ int    remove_rod()
 						
 						}
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(current_time);
-					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_remove-ts_VerificationObserver.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))
+					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))
 					{
-						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_remove-ts_VerificationObserver.nb_insert) != 0) )))
+						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) )))
 						{
-								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_remove-ts_VerificationObserver.nb_insert) != 0) ))
+								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert) != 0) ))
 								{
 									
-									ts_VerificationObserver.nb_remove++;
-									;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
+									ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove++;
+									;ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
 									exec = 1;
 								
 								}
@@ -918,7 +885,17 @@ int    remove_rod()
 					}
 				if(exec)
 				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(current_time);
+				}
+			
+			}
+			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
+			{
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+						exec = 1;
+				if(exec)
+				{
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(current_time);
 				}
 			
 			}
@@ -957,19 +934,19 @@ int    remove_rod()
 int    get_temperature(float  p0)
 {
 	int  exec = 0;
-	if((ts_VerificationObserver.ts_CallObserver.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObserver.callState == CALLED && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == CALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0)))))
+	if(((ts_VerificationObserver.ts_CallObserver.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == NOTCALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0) || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == CALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0))) || (ts_VerificationObserver.ts_CallObserver.callState == CALLED && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == NOTCALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0) || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == CALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0)))))
 	{
-		if(ts_VerificationObserver.ts_CallObserver.callState == NOTCALLED)
+		if((ts_VerificationObserver.ts_CallObserver.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == NOTCALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0) || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == CALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0))))
 		{
 			ts_VerificationObserver.ts_CallObserver.callState = CALLED;
 			ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.reset_clock(ts_VerificationObserver.left_clock_CallObserver);
-			ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1.reset_clock(ts_VerificationObserver.left_clock_CallObserver);
-			ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE2.reset_clock(ts_VerificationObserver.left_clock_CallObserver);
-			ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState = NOTCALLED;
+			ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE2.reset_clock(ts_VerificationObserver.left_clock_CallObserver);
+			ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1.reset_clock(ts_VerificationObserver.left_clock_CallObserver);
 			ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState = NOTCALLED;
-			if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == CALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0)))
+			ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState = NOTCALLED;
+			if(((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == NOTCALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0) || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == CALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0)))
 			{
-				if(ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == NOTCALLED)
+				if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == NOTCALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0))
 				{
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState = CALLED;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState = S0;
@@ -978,35 +955,41 @@ int    get_temperature(float  p0)
 					{
 						
 						if((ts_VerificationObserver.min_temp<=p0)&&(p0<=ts_VerificationObserver.max_temp)){
-						ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.reset();
+						ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.reset_clock(current_time);
 						}
 						;ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState = S0;
 						exec = 1;
 					
 					}
-					ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE2.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE2.reset_clock(current_time);
 				}else if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == CALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0))
 				{
 					if(ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0)
 					{
 						
 						if((ts_VerificationObserver.min_temp<=p0)&&(p0<=ts_VerificationObserver.max_temp)){
-						ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.reset();
+						ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.reset_clock(current_time);
 						}
 						;ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState = S0;
 						exec = 1;
 					
 					}
-					ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE2.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE2.reset_clock(current_time);
 				}
 			
 			}
-			ts_VerificationObserver.left_clock_CallObserver.reset_clock(current_time);
-		}else if((ts_VerificationObserver.ts_CallObserver.callState == CALLED && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == CALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0))))
-		{
-			if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == CALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0)))
+			if(exec)
 			{
-				if(ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == NOTCALLED)
+				
+				ts_VerificationObserver.response="true";
+				;
+			}
+			ts_VerificationObserver.left_clock_CallObserver.reset_clock(current_time);
+		}else if((ts_VerificationObserver.ts_CallObserver.callState == CALLED && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == NOTCALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0) || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == CALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0))))
+		{
+			if(((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == NOTCALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0) || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == CALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0)))
+			{
+				if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == NOTCALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0))
 				{
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState = CALLED;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState = S0;
@@ -1015,58 +998,68 @@ int    get_temperature(float  p0)
 					{
 						
 						if((ts_VerificationObserver.min_temp<=p0)&&(p0<=ts_VerificationObserver.max_temp)){
-						ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.reset();
+						ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.reset_clock(current_time);
 						}
 						;ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState = S0;
 						exec = 1;
 					
 					}
-					ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE2.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE2.reset_clock(current_time);
 				}else if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState == CALLED && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0))
 				{
 					if(ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState == S0)
 					{
 						
 						if((ts_VerificationObserver.min_temp<=p0)&&(p0<=ts_VerificationObserver.max_temp)){
-						ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.reset();
+						ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.reset_clock(current_time);
 						}
 						;ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.ts_E2.autState = S0;
 						exec = 1;
 					
 					}
-					ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE2.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE2.reset_clock(current_time);
 				}
 			
+			}
+			if(exec)
+			{
+				
+				ts_VerificationObserver.response="true";
+				;
 			}
 			ts_VerificationObserver.left_clock_CallObserver.reset_clock(current_time);
 		}
 	
 	}
-	if((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.callState == CALLED && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0))))
+	if(((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.callState == CALLED && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0))))
 	{
-		if(ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED)
+		if((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)))
 		{
 			ts_VerificationObserver.ts_CallObservers.callState = CALLED;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.temperature = 0;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1 = 0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2 = 0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3 = 0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.left_clock_Observer_3.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState = S0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState = NOTCALLED;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState = NOTCALLED;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.left_clock_Observer_3.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState = S0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
 			if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0))
 			{
 				if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState == S0)
 				{
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.temperature=p0;ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3=2;
+						
+						if((ts_VerificationObserver.min_temp<=p0)&&(p0<=ts_VerificationObserver.max_temp)){
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.reset_clock(current_time);
+						}
+						;ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3=2;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.left_clock_Observer_3.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState = S0;
 						exec = 1;
 				
@@ -1079,7 +1072,7 @@ int    get_temperature(float  p0)
 				}
 				if(exec)
 				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(current_time);
 				}
 			
 			}
@@ -1109,7 +1102,11 @@ int    get_temperature(float  p0)
 			{
 				if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState == S0)
 				{
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.temperature=p0;ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3=2;
+						
+						if((ts_VerificationObserver.min_temp<=p0)&&(p0<=ts_VerificationObserver.max_temp)){
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.reset_clock(current_time);
+						}
+						;ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3=2;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.left_clock_Observer_3.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState = S0;
 						exec = 1;
 				
@@ -1122,7 +1119,7 @@ int    get_temperature(float  p0)
 				}
 				if(exec)
 				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(current_time);
 				}
 			
 			}
@@ -1161,63 +1158,60 @@ int    get_temperature(float  p0)
 int    schedule(std::string   p0)
 {
 	int  exec = 0;
-	if(((ts_VerificationObserver.ts_CallObserver.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((((0 != 0) || (p0[ts_VerificationObserver.c] == '0'))  && ( (0 != 1) || (p0[ts_VerificationObserver.d] == '0') ) ) && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((( (0 != 1) || (p0[ts_VerificationObserver.p] == '0') )  && ( (0 != 0) || (p0[ts_VerificationObserver.z] == '0') ) ) && (( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) )  && (((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0'))  && (( (0 != 0) || (p0[ts_VerificationObserver.r] == '0') )  && ( (0 != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))) || (ts_VerificationObserver.ts_CallObserver.callState == CALLED && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((((0 != 0) || (p0[ts_VerificationObserver.c] == '0'))  && ( (0 != 1) || (p0[ts_VerificationObserver.d] == '0') ) ) && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((( (0 != 1) || (p0[ts_VerificationObserver.p] == '0') )  && ( (0 != 0) || (p0[ts_VerificationObserver.z] == '0') ) ) && (( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) )  && (((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0'))  && (( (0 != 0) || (p0[ts_VerificationObserver.r] == '0') )  && ( (0 != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) )))))))))))))
+	if(((ts_VerificationObserver.ts_CallObserver.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))))) || (ts_VerificationObserver.ts_CallObserver.callState == CALLED && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) )))))))))))))
 	{
-		if((ts_VerificationObserver.ts_CallObserver.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((((0 != 0) || (p0[ts_VerificationObserver.c] == '0'))  && ( (0 != 1) || (p0[ts_VerificationObserver.d] == '0') ) ) && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((( (0 != 1) || (p0[ts_VerificationObserver.p] == '0') )  && ( (0 != 0) || (p0[ts_VerificationObserver.z] == '0') ) ) && (( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) )  && (((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0'))  && (( (0 != 0) || (p0[ts_VerificationObserver.r] == '0') )  && ( (0 != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))
+		if((ts_VerificationObserver.ts_CallObserver.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))))))
 		{
 			ts_VerificationObserver.ts_CallObserver.callState = CALLED;
 			ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.reset_clock(ts_VerificationObserver.left_clock_CallObserver);
-			ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1.reset_clock(ts_VerificationObserver.left_clock_CallObserver);
-			ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE2.reset_clock(ts_VerificationObserver.left_clock_CallObserver);
-			ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState = NOTCALLED;
+			ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE2.reset_clock(ts_VerificationObserver.left_clock_CallObserver);
+			ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1.reset_clock(ts_VerificationObserver.left_clock_CallObserver);
 			ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE2.callState = NOTCALLED;
-			if(((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((((0 != 0) || (p0[ts_VerificationObserver.c] == '0'))  && ( (0 != 1) || (p0[ts_VerificationObserver.d] == '0') ) ) && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((( (0 != 1) || (p0[ts_VerificationObserver.p] == '0') )  && ( (0 != 0) || (p0[ts_VerificationObserver.z] == '0') ) ) && (( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) )  && (((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0'))  && (( (0 != 0) || (p0[ts_VerificationObserver.r] == '0') )  && ( (0 != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) )))))))))))
+			ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState = NOTCALLED;
+			if(((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) )))))))))))
 			{
-				if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((((0 != 0) || (p0[ts_VerificationObserver.c] == '0'))  && ( (0 != 1) || (p0[ts_VerificationObserver.d] == '0') ) ) && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((( (0 != 1) || (p0[ts_VerificationObserver.p] == '0') )  && ( (0 != 0) || (p0[ts_VerificationObserver.z] == '0') ) ) && (( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) )  && (((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0'))  && (( (0 != 0) || (p0[ts_VerificationObserver.r] == '0') )  && ( (0 != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))
+				if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))))
 				{
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState = CALLED;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.nb_r = 0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.nb_i = 0;
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.diagnostic_to_control.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.right_clock_ControGuard.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.left_clock_DiagnosticGuard.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.left_clock_D_alternateWith_C.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.right_clock_S_subclock_C.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.right_clock_C_precede_D.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.left_clock_D_precede_C.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.right_clock_ControGuard.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.left_clock_DiagnosticGuard.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.left_clock_D_alternateWith_C.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.right_clock_S_subclock_C.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.right_clock_C_precede_D.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.left_clock_D_precede_C.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState = S0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter = 0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState = S0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter = 0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState = S0;
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.right_clock_T1.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.left_clock_P_discretizedBy_10.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.right_clock_T1.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.left_clock_P_discretizedBy_10.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState = S0;
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.right_clock_T2.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.left_clock_P_alternateWith_Z.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.right_clock_P_precede_Z.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.left_clock_Z_precede_P.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.right_clock_T2.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.left_clock_P_alternateWith_Z.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.right_clock_P_precede_Z.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.left_clock_Z_precede_P.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState = S0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter = 0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState = S0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter = 0;
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.right_clock_T3.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.left_clock_iUr.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.right_clock_T3.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.left_clock_iUr.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState = S1;
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.right_clock_T4.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.left_clock_exclusion.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.right_clock_T4.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.left_clock_exclusion.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState = S0;
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.right_clock_RprecedeI.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.left_clock_IbeforeR.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.right_clock_RprecedeI.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.left_clock_IbeforeR.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState = S0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter = 0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState = S0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter = 0;
-					if(((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) )))))))))
+					if((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))))
 					{
-						if((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))))
-						{
 							if((((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) )))
 							{
 								if(((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )))
@@ -1245,19 +1239,16 @@ int    schedule(std::string   p0)
 							
 							}
 							ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.left_clock_DiagnosticGuard.reset_clock(current_time);
-						}
-						if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))
-						{
-							if((((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) )))))))
+					}
+					if((ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))
+					{
+							if(((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) )))))))
 							{
-								if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ))
+								if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ))
 								{
-									ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.left_clock_P_discretizedBy_10.reset_clock(current_time);ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState = S0;
-									exec = 1;
-								
-								}else if(ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0)
-								{
-									ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.left_clock_P_discretizedBy_10.reset_clock(current_time);ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState = S0;
+									
+									if(p0[ts_VerificationObserver.p]=='1'){ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.reset_clock(current_time);}
+									;ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.left_clock_P_discretizedBy_10.reset_clock(current_time);ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState = S0;
 									exec = 1;
 								
 								}
@@ -1320,19 +1311,12 @@ int    schedule(std::string   p0)
 							
 							}
 							ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.right_clock_ControGuard.reset_clock(current_time);
-						}
-						
-						ts_VerificationObserver.response="true";
-						cout<<"Action exécutée par le programme\n";
-						;
 					}
-					ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1.reset_clock(current_time);
-				}else if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))))
+					ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1.reset_clock(current_time);
+				}else if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))))
 				{
-					if(((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) )))))))))
+					if((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))))
 					{
-						if((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))))
-						{
 							if((((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) )))
 							{
 								if(((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )))
@@ -1360,19 +1344,16 @@ int    schedule(std::string   p0)
 							
 							}
 							ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.left_clock_DiagnosticGuard.reset_clock(current_time);
-						}
-						if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))
-						{
-							if((((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) )))))))
+					}
+					if((ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))
+					{
+							if(((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) )))))))
 							{
-								if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ))
+								if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ))
 								{
-									ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.left_clock_P_discretizedBy_10.reset_clock(current_time);ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState = S0;
-									exec = 1;
-								
-								}else if(ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0)
-								{
-									ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.left_clock_P_discretizedBy_10.reset_clock(current_time);ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState = S0;
+									
+									if(p0[ts_VerificationObserver.p]=='1'){ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.reset_clock(current_time);}
+									;ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.left_clock_P_discretizedBy_10.reset_clock(current_time);ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState = S0;
 									exec = 1;
 								
 								}
@@ -1435,66 +1416,64 @@ int    schedule(std::string   p0)
 							
 							}
 							ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.right_clock_ControGuard.reset_clock(current_time);
-						}
-						
-						ts_VerificationObserver.response="true";
-						cout<<"Action exécutée par le programme\n";
-						;
 					}
-					ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1.reset_clock(current_time);
 				}
 			
 			}
-			ts_VerificationObserver.left_clock_CallObserver.reset_clock(current_time);
-		}else if((ts_VerificationObserver.ts_CallObserver.callState == CALLED && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((((0 != 0) || (p0[ts_VerificationObserver.c] == '0'))  && ( (0 != 1) || (p0[ts_VerificationObserver.d] == '0') ) ) && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((( (0 != 1) || (p0[ts_VerificationObserver.p] == '0') )  && ( (0 != 0) || (p0[ts_VerificationObserver.z] == '0') ) ) && (( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) )  && (((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0'))  && (( (0 != 0) || (p0[ts_VerificationObserver.r] == '0') )  && ( (0 != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))))))
-		{
-			if(((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((((0 != 0) || (p0[ts_VerificationObserver.c] == '0'))  && ( (0 != 1) || (p0[ts_VerificationObserver.d] == '0') ) ) && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((( (0 != 1) || (p0[ts_VerificationObserver.p] == '0') )  && ( (0 != 0) || (p0[ts_VerificationObserver.z] == '0') ) ) && (( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) )  && (((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0'))  && (( (0 != 0) || (p0[ts_VerificationObserver.r] == '0') )  && ( (0 != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) )))))))))))
+			if(exec)
 			{
-				if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((((0 != 0) || (p0[ts_VerificationObserver.c] == '0'))  && ( (0 != 1) || (p0[ts_VerificationObserver.d] == '0') ) ) && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((( (0 != 1) || (p0[ts_VerificationObserver.p] == '0') )  && ( (0 != 0) || (p0[ts_VerificationObserver.z] == '0') ) ) && (( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) )  && (((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0'))  && (( (0 != 0) || (p0[ts_VerificationObserver.r] == '0') )  && ( (0 != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))
+				
+				ts_VerificationObserver.response="true";
+				;
+			}
+			ts_VerificationObserver.left_clock_CallObserver.reset_clock(current_time);
+		}else if((ts_VerificationObserver.ts_CallObserver.callState == CALLED && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))))))
+		{
+			if(((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) )))))))))))
+			{
+				if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))))
 				{
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState = CALLED;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.nb_r = 0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.nb_i = 0;
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.diagnostic_to_control.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.right_clock_ControGuard.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.left_clock_DiagnosticGuard.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.left_clock_D_alternateWith_C.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.right_clock_S_subclock_C.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.right_clock_C_precede_D.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.left_clock_D_precede_C.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.right_clock_ControGuard.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.left_clock_DiagnosticGuard.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.left_clock_D_alternateWith_C.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.right_clock_S_subclock_C.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.right_clock_C_precede_D.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.left_clock_D_precede_C.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState = S0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter = 0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState = S0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter = 0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState = S0;
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.right_clock_T1.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.left_clock_P_discretizedBy_10.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.right_clock_T1.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.left_clock_P_discretizedBy_10.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState = S0;
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.right_clock_T2.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.left_clock_P_alternateWith_Z.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.right_clock_P_precede_Z.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.left_clock_Z_precede_P.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.right_clock_T2.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.left_clock_P_alternateWith_Z.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.right_clock_P_precede_Z.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.left_clock_Z_precede_P.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState = S0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter = 0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState = S0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter = 0;
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.right_clock_T3.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.left_clock_iUr.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.right_clock_T3.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.left_clock_iUr.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState = S1;
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.right_clock_T4.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.left_clock_exclusion.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.right_clock_T4.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.left_clock_exclusion.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState = S0;
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.right_clock_RprecedeI.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
-					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.left_clock_IbeforeR.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.right_clock_RprecedeI.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.left_clock_IbeforeR.reset_clock(ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1);
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState = S0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter = 0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState = S0;
 					ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter = 0;
-					if(((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) )))))))))
+					if((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))))
 					{
-						if((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))))
-						{
 							if((((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) )))
 							{
 								if(((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )))
@@ -1522,19 +1501,16 @@ int    schedule(std::string   p0)
 							
 							}
 							ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.left_clock_DiagnosticGuard.reset_clock(current_time);
-						}
-						if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))
-						{
-							if((((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) )))))))
+					}
+					if((ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))
+					{
+							if(((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) )))))))
 							{
-								if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ))
+								if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ))
 								{
-									ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.left_clock_P_discretizedBy_10.reset_clock(current_time);ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState = S0;
-									exec = 1;
-								
-								}else if(ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0)
-								{
-									ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.left_clock_P_discretizedBy_10.reset_clock(current_time);ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState = S0;
+									
+									if(p0[ts_VerificationObserver.p]=='1'){ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.reset_clock(current_time);}
+									;ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.left_clock_P_discretizedBy_10.reset_clock(current_time);ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState = S0;
 									exec = 1;
 								
 								}
@@ -1597,19 +1573,12 @@ int    schedule(std::string   p0)
 							
 							}
 							ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.right_clock_ControGuard.reset_clock(current_time);
-						}
-						
-						ts_VerificationObserver.response="true";
-						cout<<"Action exécutée par le programme\n";
-						;
 					}
-					ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1.reset_clock(current_time);
-				}else if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))))
+					ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1.reset_clock(current_time);
+				}else if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) || (ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))))
 				{
-					if(((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) )))))))))
+					if((! ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))))
 					{
-						if((! ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) ))))
-						{
 							if((((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_S_subclock_C.autState == S0 && ((p0[ts_VerificationObserver.s] == '0') || (p0[ts_VerificationObserver.c] == '1')) )))
 							{
 								if(((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.autState == S0 && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_D_precede_C.counter != 0) || (p0[ts_VerificationObserver.c] == '0')) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_DiagnosticGuard.ts_Diagnostic_CCSL.ts_D_alternateWith_C.ts_C_precede_D.counter != 1) || (p0[ts_VerificationObserver.d] == '0') ) )))
@@ -1637,19 +1606,16 @@ int    schedule(std::string   p0)
 							
 							}
 							ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.left_clock_DiagnosticGuard.reset_clock(current_time);
-						}
-						if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_VerificationObserver.ts_CallObserver.ts_Program.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))
-						{
-							if((((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ) || ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) )))))))
+					}
+					if((ts_VerificationObserver.ts_CallObserver.ts_Program.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) ))))))))
+					{
+							if(((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ) && (((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_Z_precede_P.counter != 1) || (p0[ts_VerificationObserver.p] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_P_alternateWith_Z.ts_P_precede_Z.counter != 0) || (p0[ts_VerificationObserver.z] == '0') ) )) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_iUr.autState == S1 && ( (p0[ts_VerificationObserver.z]-'0') == ((p0[ts_VerificationObserver.r]-'0')+(p0[ts_VerificationObserver.i]-'0')) ) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_exclusion.autState == S0 && ((p0[ts_VerificationObserver.i] == '0') || (p0[ts_VerificationObserver.r] == '0')) ) && ((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_IbeforeR.counter != 0) || (p0[ts_VerificationObserver.r] == '0') ) ) && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.autState == S0 && ( (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_T1.ts_T2.ts_T3.ts_T4.ts_RprecedeI.counter != 2) || (p0[ts_VerificationObserver.i] == '0') ) )))))))
 							{
-								if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && ((p0[ts_VerificationObserver.p] == '1') && (ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time))) ))
+								if((ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0 && (((p0[ts_VerificationObserver.p] == '1') && ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.expired(1E10, current_time)) || (p0[ts_VerificationObserver.p] == '0')) ))
 								{
-									ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.left_clock_P_discretizedBy_10.reset_clock(current_time);ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState = S0;
-									exec = 1;
-								
-								}else if(ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState == S0)
-								{
-									ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.left_clock_P_discretizedBy_10.reset_clock(current_time);ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState = S0;
+									
+									if(p0[ts_VerificationObserver.p]=='1'){ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.periodic_sense_timer.reset_clock(current_time);}
+									;ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.left_clock_P_discretizedBy_10.reset_clock(current_time);ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.ts_ControGuard.ts_Control_CCSL.ts_P_discretizedBy_10.autState = S0;
 									exec = 1;
 								
 								}
@@ -1712,15 +1678,16 @@ int    schedule(std::string   p0)
 							
 							}
 							ts_VerificationObserver.ts_CallObserver.ts_Program.ts_CallE1.ts_E1.right_clock_ControGuard.reset_clock(current_time);
-						}
-						
-						ts_VerificationObserver.response="true";
-						cout<<"Action exécutée par le programme\n";
-						;
 					}
-					ts_VerificationObserver.ts_CallObserver.ts_Program.left_clock_CallE1.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObserver.ts_Program.right_clock_CallE1.reset_clock(current_time);
 				}
 			
+			}
+			if(exec)
+			{
+				
+				ts_VerificationObserver.response="true";
+				;
 			}
 			ts_VerificationObserver.left_clock_CallObserver.reset_clock(current_time);
 		}
@@ -1738,324 +1705,98 @@ int    schedule(std::string   p0)
 int    insert_rod()
 {
 	int  exec = 0;
-	if((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.callState == CALLED && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0 || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_insert-ts_VerificationObserver.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))))))
+	if(((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.callState == CALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0))))
 	{
-		if(ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED)
+		if((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)))
 		{
 			ts_VerificationObserver.ts_CallObservers.callState = CALLED;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.temperature = 0;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1 = 0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2 = 0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3 = 0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.left_clock_Observer_3.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState = S0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState = NOTCALLED;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState = NOTCALLED;
-			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
-			{
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
-						exec = 1;
-				if(exec)
-				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(current_time);
-				}
-			
-			}
-			if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_insert-ts_VerificationObserver.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))))
-			{
-					if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED)
-					{
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState = CALLED;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer .reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.violation = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.left_clock_ControlExecutionGuard.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.right_clock_Check2.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState = S0;
-						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_insert-ts_VerificationObserver.nb_remove) != 2) )))
-						{
-								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_insert-ts_VerificationObserver.nb_remove) != 2) ))
-								{
-									ts_VerificationObserver.nb_insert++;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
-									exec = 1;
-								
-								}
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.left_clock_ControlExecutionGuard.reset_clock(current_time);
-						}
-						if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)
-						{
-								
-								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2!=2){
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=1;
-								}
-								;
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.right_clock_Check2.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState = S0;
-								exec = 1;
-						
-						}
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(current_time);
-					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_insert-ts_VerificationObserver.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))
-					{
-						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_insert-ts_VerificationObserver.nb_remove) != 2) )))
-						{
-								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_insert-ts_VerificationObserver.nb_remove) != 2) ))
-								{
-									ts_VerificationObserver.nb_insert++;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
-									exec = 1;
-								
-								}
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.left_clock_ControlExecutionGuard.reset_clock(current_time);
-						}
-						if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)
-						{
-								
-								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2!=2){
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=1;
-								}
-								;
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.right_clock_Check2.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState = S0;
-								exec = 1;
-						
-						}
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(current_time);
-					}
-				if(exec)
-				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(current_time);
-				}
-			
-			}
-			if(exec)
-			{
-				
-				if((ts_VerificationObserver.response=="true")&&((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1==1)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2==1)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3==1))){
-				std::cout<<"Violation\n";
-				}
-				if((ts_VerificationObserver.response=="false")&&((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1==0))&&
-				((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2==0))&&
-				((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3==0))&&
-				((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3==2))
-				){
-				std::cout<<"Violation\n";
-				}
-				ts_VerificationObserver.response="";
-				ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=0;
-				ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=0;
-				ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3=0;
-				;
-			}
-			ts_VerificationObserver.right_clock_CallObservers.reset_clock(current_time);
-		}else if((ts_VerificationObserver.ts_CallObservers.callState == CALLED && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0 || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_insert-ts_VerificationObserver.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))))))
-		{
-			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
-			{
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
-						exec = 1;
-				if(exec)
-				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(current_time);
-				}
-			
-			}
-			if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_insert-ts_VerificationObserver.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))))
-			{
-					if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED)
-					{
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState = CALLED;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer .reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.violation = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.left_clock_ControlExecutionGuard.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.right_clock_Check2.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState = S0;
-						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_insert-ts_VerificationObserver.nb_remove) != 2) )))
-						{
-								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_insert-ts_VerificationObserver.nb_remove) != 2) ))
-								{
-									ts_VerificationObserver.nb_insert++;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
-									exec = 1;
-								
-								}
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.left_clock_ControlExecutionGuard.reset_clock(current_time);
-						}
-						if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)
-						{
-								
-								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2!=2){
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=1;
-								}
-								;
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.right_clock_Check2.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState = S0;
-								exec = 1;
-						
-						}
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(current_time);
-					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_insert-ts_VerificationObserver.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))
-					{
-						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_insert-ts_VerificationObserver.nb_remove) != 2) )))
-						{
-								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.nb_insert-ts_VerificationObserver.nb_remove) != 2) ))
-								{
-									ts_VerificationObserver.nb_insert++;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
-									exec = 1;
-								
-								}
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.left_clock_ControlExecutionGuard.reset_clock(current_time);
-						}
-						if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)
-						{
-								
-								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2!=2){
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=1;
-								}
-								;
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.right_clock_Check2.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState = S0;
-								exec = 1;
-						
-						}
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(current_time);
-					}
-				if(exec)
-				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(current_time);
-				}
-			
-			}
-			if(exec)
-			{
-				
-				if((ts_VerificationObserver.response=="true")&&((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1==1)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2==1)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3==1))){
-				std::cout<<"Violation\n";
-				}
-				if((ts_VerificationObserver.response=="false")&&((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1==0))&&
-				((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2==0))&&
-				((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3==0))&&
-				((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3==2))
-				){
-				std::cout<<"Violation\n";
-				}
-				ts_VerificationObserver.response="";
-				ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=0;
-				ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=0;
-				ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3=0;
-				;
-			}
-			ts_VerificationObserver.right_clock_CallObservers.reset_clock(current_time);
-		}
-	
-	}
-	if(exec == 1)
-	{
-		last_event_time.reset_clock(current_time);
-	
-	}
-	return exec;
-
-}
-
-int    diagnostic()
-{
-	int  exec = 0;
-	if((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.callState == CALLED && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0 || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))))))
-	{
-		if(ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED)
-		{
-			ts_VerificationObserver.ts_CallObservers.callState = CALLED;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.temperature = 0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1 = 0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2 = 0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3 = 0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.left_clock_Observer_3.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState = S0;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState = NOTCALLED;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState = NOTCALLED;
+			if(((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))))
+			{
+					if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))
+					{
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState = CALLED;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer .reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove = 0;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert = 0;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.left_clock_ControlExecutionGuard.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.right_clock_Check2.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState = S0;
+						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )))
+						{
+								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) ))
+								{
+									ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert++;ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
+									exec = 1;
+								
+								}
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.left_clock_ControlExecutionGuard.reset_clock(current_time);
+						}
+						if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)
+						{
+								
+								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2!=2){
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=1;
+								}
+								;
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.right_clock_Check2.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState = S0;
+								exec = 1;
+						
+						}
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(current_time);
+					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))
+					{
+						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )))
+						{
+								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) ))
+								{
+									ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert++;ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
+									exec = 1;
+								
+								}
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.left_clock_ControlExecutionGuard.reset_clock(current_time);
+						}
+						if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)
+						{
+								
+								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2!=2){
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=1;
+								}
+								;
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.right_clock_Check2.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState = S0;
+								exec = 1;
+						
+						}
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(current_time);
+					}
+				if(exec)
+				{
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(current_time);
+				}
+			
+			}
 			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
 			{
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
 						exec = 1;
 				if(exec)
 				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(current_time);
-				}
-			
-			}
-			if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))))
-			{
-					if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED)
-					{
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState = CALLED;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.violation = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.withChange = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.status = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.my_event = " ";
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.right_clock_Check1.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S0;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState = S0;
-						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0))
-						{
-								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0)
-								{
-									ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S1;
-									exec = 1;
-								
-								}
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(current_time);
-						}
-						if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)
-						{
-								
-								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1!=2){
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=1;
-								}
-								;
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.right_clock_Check1.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState = S0;
-								exec = 1;
-						
-						}
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(current_time);
-					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))
-					{
-						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0))
-						{
-								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0)
-								{
-									ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S1;
-									exec = 1;
-								
-								}
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(current_time);
-						}
-						if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)
-						{
-								
-								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1!=2){
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=1;
-								}
-								;
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.right_clock_Check1.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState = S0;
-								exec = 1;
-						
-						}
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(current_time);
-					}
-				if(exec)
-				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(current_time);
 				}
 			
 			}
@@ -2079,81 +1820,80 @@ int    diagnostic()
 				;
 			}
 			ts_VerificationObserver.right_clock_CallObservers.reset_clock(current_time);
-		}else if((ts_VerificationObserver.ts_CallObservers.callState == CALLED && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0 || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))))))
+		}else if((ts_VerificationObserver.ts_CallObservers.callState == CALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)))
 		{
+			if(((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))))
+			{
+					if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))
+					{
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState = CALLED;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer .reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove = 0;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert = 0;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.left_clock_ControlExecutionGuard.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.right_clock_Check2.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState = S0;
+						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )))
+						{
+								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) ))
+								{
+									ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert++;ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
+									exec = 1;
+								
+								}
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.left_clock_ControlExecutionGuard.reset_clock(current_time);
+						}
+						if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)
+						{
+								
+								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2!=2){
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=1;
+								}
+								;
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.right_clock_Check2.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState = S0;
+								exec = 1;
+						
+						}
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(current_time);
+					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))
+					{
+						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) )))
+						{
+								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert-ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove) != 2) ))
+								{
+									ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert++;ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
+									exec = 1;
+								
+								}
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.left_clock_ControlExecutionGuard.reset_clock(current_time);
+						}
+						if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)
+						{
+								
+								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2!=2){
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=1;
+								}
+								;
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.right_clock_Check2.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState = S0;
+								exec = 1;
+						
+						}
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(current_time);
+					}
+				if(exec)
+				{
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(current_time);
+				}
+			
+			}
 			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
 			{
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
 						exec = 1;
 				if(exec)
 				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(current_time);
-				}
-			
-			}
-			if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))))
-			{
-					if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED)
-					{
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState = CALLED;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.violation = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.withChange = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.status = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.my_event = " ";
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.right_clock_Check1.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S0;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState = S0;
-						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0))
-						{
-								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0)
-								{
-									ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S1;
-									exec = 1;
-								
-								}
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(current_time);
-						}
-						if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)
-						{
-								
-								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1!=2){
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=1;
-								}
-								;
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.right_clock_Check1.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState = S0;
-								exec = 1;
-						
-						}
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(current_time);
-					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))
-					{
-						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0))
-						{
-								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0)
-								{
-									ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S1;
-									exec = 1;
-								
-								}
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(current_time);
-						}
-						if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)
-						{
-								
-								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1!=2){
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=1;
-								}
-								;
-								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.right_clock_Check1.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState = S0;
-								exec = 1;
-						
-						}
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(current_time);
-					}
-				if(exec)
-				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(current_time);
 				}
 			
 			}
@@ -2192,57 +1932,48 @@ int    diagnostic()
 int    periodic_sense()
 {
 	int  exec = 0;
-	if((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.callState == CALLED && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0 || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))))))
+	if(((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.callState == CALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0))))
 	{
-		if(ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED)
+		if((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)))
 		{
 			ts_VerificationObserver.ts_CallObservers.callState = CALLED;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.temperature = 0;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1 = 0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2 = 0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3 = 0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.left_clock_Observer_3.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState = S0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState = NOTCALLED;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState = NOTCALLED;
-			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.left_clock_Observer_3.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState = S0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+			if(((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))))
 			{
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
-						exec = 1;
-				if(exec)
-				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(current_time);
-				}
-			
-			}
-			if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))))
-			{
-					if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED)
+					if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))
 					{
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState = CALLED;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer .reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.violation = true;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove = 0;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert = 0;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.left_clock_ControlExecutionGuard.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.right_clock_Check2.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState = S0;
-						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && periodic_timer.expired(1E10, current_time) ))))
+						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))))
 						{
-								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && periodic_timer.expired(1E10, current_time) ))
+								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))
 								{
-									periodic_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S0;
+									 ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S0;
 									exec = 1;
 								
-								}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && periodic_timer.expired(1E10, current_time) ))
+								}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))
 								{
-									periodic_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S0;
+									 ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S0;
 									exec = 1;
 								
 								}
@@ -2260,18 +1991,18 @@ int    periodic_sense()
 						
 						}
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(current_time);
-					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))
+					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))
 					{
-						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && periodic_timer.expired(1E10, current_time) ))))
+						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))))
 						{
-								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && periodic_timer.expired(1E10, current_time) ))
+								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))
 								{
-									periodic_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S0;
+									 ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S0;
 									exec = 1;
 								
-								}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && periodic_timer.expired(1E10, current_time) ))
+								}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))
 								{
-									periodic_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S0;
+									 ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S0;
 									exec = 1;
 								
 								}
@@ -2292,7 +2023,17 @@ int    periodic_sense()
 					}
 				if(exec)
 				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(current_time);
+				}
+			
+			}
+			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
+			{
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+						exec = 1;
+				if(exec)
+				{
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(current_time);
 				}
 			
 			}
@@ -2316,39 +2057,30 @@ int    periodic_sense()
 				;
 			}
 			ts_VerificationObserver.right_clock_CallObservers.reset_clock(current_time);
-		}else if((ts_VerificationObserver.ts_CallObservers.callState == CALLED && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0 || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))))))
+		}else if((ts_VerificationObserver.ts_CallObservers.callState == CALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)))
 		{
-			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
+			if(((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))))
 			{
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
-						exec = 1;
-				if(exec)
-				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(current_time);
-				}
-			
-			}
-			if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0))))
-			{
-					if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED)
+					if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == NOTCALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))
 					{
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState = CALLED;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer .reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.violation = true;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_remove = 0;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.nb_insert = 0;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.left_clock_ControlExecutionGuard.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.right_clock_Check2.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S1;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState = S0;
-						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && periodic_timer.expired(1E10, current_time) ))))
+						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))))
 						{
-								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && periodic_timer.expired(1E10, current_time) ))
+								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))
 								{
-									periodic_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S0;
+									 ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S0;
 									exec = 1;
 								
-								}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && periodic_timer.expired(1E10, current_time) ))
+								}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))
 								{
-									periodic_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S0;
+									 ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S0;
 									exec = 1;
 								
 								}
@@ -2366,18 +2098,18 @@ int    periodic_sense()
 						
 						}
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(current_time);
-					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))
+					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState == CALLED && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_Check2.autState == S0)))
 					{
-						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && periodic_timer.expired(1E10, current_time) ))))
+						if((ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))))
 						{
-								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && periodic_timer.expired(1E10, current_time) ))
+								if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S1 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))
 								{
-									periodic_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S0;
+									 ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S0;
 									exec = 1;
 								
-								}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && periodic_timer.expired(1E10, current_time) ))
+								}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState == S0 && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.expired(1E10, current_time) ))
 								{
-									periodic_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S0;
+									 ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.periodic_timer.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.ts_ObserverControl.ts_ControlExecutionGuard.ts_ControlExecution.autState = S0;
 									exec = 1;
 								
 								}
@@ -2398,7 +2130,258 @@ int    periodic_sense()
 					}
 				if(exec)
 				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(current_time);
+				}
+			
+			}
+			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
+			{
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+						exec = 1;
+				if(exec)
+				{
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(current_time);
+				}
+			
+			}
+			if(exec)
+			{
+				
+				if((ts_VerificationObserver.response=="true")&&((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1==1)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2==1)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3==1))){
+				std::cout<<"Violation\n";
+				}
+				if((ts_VerificationObserver.response=="false")&&((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1==0))&&
+				((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2==0))&&
+				((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3==0))&&
+				((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3==2))
+				){
+				std::cout<<"Violation\n";
+				}
+				ts_VerificationObserver.response="";
+				ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=0;
+				ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=0;
+				ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3=0;
+				;
+			}
+			ts_VerificationObserver.right_clock_CallObservers.reset_clock(current_time);
+		}
+	
+	}
+	if(exec == 1)
+	{
+		last_event_time.reset_clock(current_time);
+	
+	}
+	return exec;
+
+}
+
+int    diagnostic()
+{
+	int  exec = 0;
+	if(((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.callState == CALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0))))
+	{
+		if((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)))
+		{
+			ts_VerificationObserver.ts_CallObservers.callState = CALLED;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.temperature = 0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1 = 0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2 = 0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3 = 0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState = NOTCALLED;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState = NOTCALLED;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.left_clock_Observer_3.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState = S0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+			if(((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))))
+			{
+					if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))
+					{
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState = CALLED;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.right_clock_Check1.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S0;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState = S0;
+						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)))
+						{
+								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0)
+								{
+									ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S1;
+									exec = 1;
+								
+								}else if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)
+								{
+									ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S1;
+									exec = 1;
+								
+								}
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(current_time);
+						}
+						if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)
+						{
+								
+								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1!=2){
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=1;
+								}
+								;
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.right_clock_Check1.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState = S0;
+								exec = 1;
+						
+						}
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(current_time);
+					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))
+					{
+						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)))
+						{
+								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0)
+								{
+									ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S1;
+									exec = 1;
+								
+								}else if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)
+								{
+									ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S1;
+									exec = 1;
+								
+								}
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(current_time);
+						}
+						if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)
+						{
+								
+								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1!=2){
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=1;
+								}
+								;
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.right_clock_Check1.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState = S0;
+								exec = 1;
+						
+						}
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(current_time);
+					}
+				if(exec)
+				{
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(current_time);
+				}
+			
+			}
+			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
+			{
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+						exec = 1;
+				if(exec)
+				{
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(current_time);
+				}
+			
+			}
+			if(exec)
+			{
+				
+				if((ts_VerificationObserver.response=="true")&&((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1==1)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2==1)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3==1))){
+				std::cout<<"Violation\n";
+				}
+				if((ts_VerificationObserver.response=="false")&&((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1==0))&&
+				((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2==0))&&
+				((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3==0))&&
+				((ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2==2)||(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3==2))
+				){
+				std::cout<<"Violation\n";
+				}
+				ts_VerificationObserver.response="";
+				ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=0;
+				ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2=0;
+				ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3=0;
+				;
+			}
+			ts_VerificationObserver.right_clock_CallObservers.reset_clock(current_time);
+		}else if((ts_VerificationObserver.ts_CallObservers.callState == CALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)))
+		{
+			if(((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))))
+			{
+					if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))
+					{
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState = CALLED;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.right_clock_Check1.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S0;
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState = S0;
+						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)))
+						{
+								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0)
+								{
+									ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S1;
+									exec = 1;
+								
+								}else if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)
+								{
+									ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S1;
+									exec = 1;
+								
+								}
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(current_time);
+						}
+						if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)
+						{
+								
+								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1!=2){
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=1;
+								}
+								;
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.right_clock_Check1.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState = S0;
+								exec = 1;
+						
+						}
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(current_time);
+					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))
+					{
+						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0 || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)))
+						{
+								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S0)
+								{
+									ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S1;
+									exec = 1;
+								
+								}else if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S2)
+								{
+									ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=2;ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S1;
+									exec = 1;
+								
+								}
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(current_time);
+						}
+						if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)
+						{
+								
+								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1!=2){
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1=1;
+								}
+								;
+								ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.right_clock_Check1.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState = S0;
+								exec = 1;
+						
+						}
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(current_time);
+					}
+				if(exec)
+				{
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(current_time);
+				}
+			
+			}
+			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
+			{
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+						exec = 1;
+				if(exec)
+				{
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(current_time);
 				}
 			
 			}
@@ -2437,50 +2420,36 @@ int    periodic_sense()
 int    reconfig()
 {
 	int  exec = 0;
-	if((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.callState == CALLED && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0 || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))))))
+	if(((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.callState == CALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0))))
 	{
-		if(ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED)
+		if((ts_VerificationObserver.ts_CallObservers.callState == NOTCALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)))
 		{
 			ts_VerificationObserver.ts_CallObservers.callState = CALLED;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.temperature = 0;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_1 = 0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_2 = 0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.obr_3 = 0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.left_clock_Observer_3.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState = S0;
-			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.right_clock_CallObserver_2.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState = NOTCALLED;
 			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_2.callState = NOTCALLED;
-			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.left_clock_Observer_3.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(ts_VerificationObserver.right_clock_CallObservers);
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_Observer_3.autState = S0;
+			ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+			if(((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))))
 			{
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
-						exec = 1;
-				if(exec)
-				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(current_time);
-				}
-			
-			}
-			if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))))
-			{
-					if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED)
+					if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))
 					{
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState = CALLED;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.violation = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.withChange = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.status = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.my_event = " ";
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.right_clock_Check1.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S0;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState = S0;
-						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1))
+						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1))
 						{
 								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1)
 								{
@@ -2502,9 +2471,9 @@ int    reconfig()
 						
 						}
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(current_time);
-					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))
+					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))
 					{
-						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1))
+						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1))
 						{
 								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1)
 								{
@@ -2529,7 +2498,17 @@ int    reconfig()
 					}
 				if(exec)
 				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(current_time);
+				}
+			
+			}
+			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
+			{
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+						exec = 1;
+				if(exec)
+				{
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(current_time);
 				}
 			
 			}
@@ -2553,32 +2532,18 @@ int    reconfig()
 				;
 			}
 			ts_VerificationObserver.right_clock_CallObservers.reset_clock(current_time);
-		}else if((ts_VerificationObserver.ts_CallObservers.callState == CALLED && (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0 || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))))))
+		}else if((ts_VerificationObserver.ts_CallObservers.callState == CALLED && (((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)))
 		{
-			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
+			if(((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)) || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))))
 			{
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
-						exec = 1;
-				if(exec)
-				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_1.reset_clock(current_time);
-				}
-			
-			}
-			if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED || (ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0))))
-			{
-					if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED)
+					if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == NOTCALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))
 					{
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState = CALLED;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.violation = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.withChange = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.status = true;
-						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.my_event = " ";
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.left_clock_DiagnosticExecutionGuard.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.right_clock_Check1.reset_clock(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1);
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState = S0;
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState = S0;
-						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1))
+						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1))
 						{
 								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1)
 								{
@@ -2600,9 +2565,9 @@ int    reconfig()
 						
 						}
 						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.left_clock_CallObserver_1.reset_clock(current_time);
-					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))
+					}else if((ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.callState == CALLED && ((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1) || ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_Check1.autState == S0)))
 					{
-						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_VerificationObserver.diagnostic_to_control.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1))
+						if((! ts_VerificationObserver.ts_CallObservers.ts_Observers.diagnostic_to_control_observer.expired(1E11, current_time)  && ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1))
 						{
 								if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_2.ts_CallObserver_1.ts_ObserverDiagnostic.ts_DiagnosticExecutionGuard.ts_DiagnosticExecution.autState == S1)
 								{
@@ -2627,7 +2592,17 @@ int    reconfig()
 					}
 				if(exec)
 				{
-					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_2.reset_clock(current_time);
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.left_clock_Observer_Bloc_2.reset_clock(current_time);
+				}
+			
+			}
+			if(ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState == S0)
+			{
+						ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.right_clock_TestObserver.reset_clock(current_time);ts_VerificationObserver.ts_CallObservers.ts_Observers.ts_Observer_Bloc_1.ts_TestObserver.autState = S0;
+						exec = 1;
+				if(exec)
+				{
+					ts_VerificationObserver.ts_CallObservers.ts_Observers.right_clock_Observer_Bloc_1.reset_clock(current_time);
 				}
 			
 			}
@@ -2666,20 +2641,15 @@ int main(int argc, char** argv)
 {
 	IO::configInputStream(argc, argv);
 	ts_VerificationObserver.i = i;
-	ts_VerificationObserver.temperature = ts_VerificationObserver.min_temp;
-	ts_VerificationObserver.z = z;
-	ts_VerificationObserver.max_temp = max_temp;
-	ts_VerificationObserver.diagnostic_to_control.reset_clock(current_time);
-	ts_VerificationObserver.p = p;
 	ts_VerificationObserver.r = r;
+	ts_VerificationObserver.z = z;
 	ts_VerificationObserver.c = c;
 	ts_VerificationObserver.s = s;
 	ts_VerificationObserver.d = d;
-	ts_VerificationObserver.withChange = false;
 	ts_VerificationObserver.min_temp = min_temp;
-	ts_VerificationObserver.nb_remove = 0;
+	ts_VerificationObserver.max_temp = max_temp;
 	ts_VerificationObserver.response = "";
-	ts_VerificationObserver.nb_insert = 0;
+	ts_VerificationObserver.p = p;
 	ts_VerificationObserver.left_clock_CallObserver.reset_clock(current_time);
 	ts_VerificationObserver.right_clock_CallObservers.reset_clock(current_time);
 	ts_VerificationObserver.ts_CallObserver.callState = NOTCALLED;
@@ -2787,9 +2757,9 @@ int main(int argc, char** argv)
 			
 			}
 		
-		}else if(_evt.label.compare("diagnostic") == 0)
+		}else if(_evt.label.compare("periodic_sense") == 0)
 		{
-			if(diagnostic())
+			if(periodic_sense())
 			{
 				continue;
 			}else 
@@ -2798,9 +2768,9 @@ int main(int argc, char** argv)
 			
 			}
 		
-		}else if(_evt.label.compare("periodic_sense") == 0)
+		}else if(_evt.label.compare("diagnostic") == 0)
 		{
-			if(periodic_sense())
+			if(diagnostic())
 			{
 				continue;
 			}else 
