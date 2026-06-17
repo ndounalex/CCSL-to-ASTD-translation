@@ -30,9 +30,7 @@ our warehouse is mainly made up of the following elements:
 - The "E1_observer" folder contains an example implementation of an observer for our TCS case, where the translation from CCSL to TASTD is used as the observer.
 - The "P_observer" folder contains an example implementation of an observer for our TCS case, where a specification written directly in TASTD is used as the observer for our translation from CCSL to TASTD, which in turn is used as the observed programme.
 - The "P observer with violation" folder contains an example implementation of an observer for our TCS case, where a specification written directly in TASTD is used as the observer for our translation from CCSL to TASTD, which in turn is used as the observed programme. However, we are testing a scenario in which we detect violations after introducing errors into our CCSL-to-TASTD translation to render it invalid, thereby deliberately triggering violation detections, which demonstrates the effectiveness of our system.
-
-
-
+- The "P observer for C" folder  contains an example implementation of an observer for our TCS case, where a specification written directly in TASTD is used as an observer for our translation from CCSL to TASTD. This is augmented here by a TASTD module implementing the functional aspects of our case study that CCSL could not model, and the resulting specification is used as the observed program. 
 
 ## ReadTheDocs
 
