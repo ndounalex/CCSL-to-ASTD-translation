@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<org.eventb.core.contextFile org.eventb.core.configuration="org.eventb.core.fwd" version="3">
+    <org.eventb.core.carrierSet name="set1" org.eventb.core.identifier="CLOCK"/>
+    <org.eventb.core.constant de.prob.symbolic.symbolicAttribute="false" name="cst1" org.eventb.core.identifier="c1"/>
+    <org.eventb.core.constant de.prob.symbolic.symbolicAttribute="false" name="cst2" org.eventb.core.identifier="c2"/>
+    <org.eventb.core.constant de.prob.symbolic.symbolicAttribute="false" name="cst3" org.eventb.core.identifier="c3"/>
+    <org.eventb.core.constant de.prob.symbolic.symbolicAttribute="false" name="cst4" org.eventb.core.identifier="minint"/>
+    <org.eventb.core.constant de.prob.symbolic.symbolicAttribute="false" name="cst5" org.eventb.core.identifier="maxint"/>
+    <org.eventb.core.constant de.prob.symbolic.symbolicAttribute="false" name="cst6" org.eventb.core.identifier="INT_IMP"/>
+    <org.eventb.core.constant de.prob.symbolic.symbolicAttribute="false" name="cst7" org.eventb.core.identifier="NAT_IMP"/>
+    <org.eventb.core.constant de.prob.symbolic.symbolicAttribute="false" name="cst8" org.eventb.core.identifier="NAT1_IMP"/>
+    <org.eventb.core.constant name="cst9" org.eventb.core.identifier="Int2Bool"/>
+    <org.eventb.core.axiom name="axm1" org.eventb.core.label="axm1" org.eventb.core.predicate="{c1,c2,c3} ⊆ CLOCK"/>
+    <org.eventb.core.axiom name="set2" org.eventb.core.label="axm2" org.eventb.core.predicate="c1 ≠ c2 ∧ c2≠ c3 ∧ c3≠c1"/>
+    <org.eventb.core.axiom name="axm2" org.eventb.core.label="axm4" org.eventb.core.predicate="maxint ∈ ℕ"/>
+    <org.eventb.core.axiom name="axm3" org.eventb.core.label="axm5" org.eventb.core.predicate="minint &lt; 0"/>
+    <org.eventb.core.axiom name="axm4" org.eventb.core.label="axm6" org.eventb.core.predicate="INT_IMP = minint‥maxint"/>
+    <org.eventb.core.axiom name="axm5" org.eventb.core.label="axm12" org.eventb.core.predicate="NAT_IMP = 0‥maxint"/>
+    <org.eventb.core.axiom name="axm6" org.eventb.core.label="axm13" org.eventb.core.predicate="NAT1_IMP = NAT_IMP∖{0}"/>
+    <org.eventb.core.axiom name="axm7" org.eventb.core.label="axm15" org.eventb.core.predicate="maxint &gt; 0"/>
+    <org.eventb.core.axiom name="axm8" org.eventb.core.label="axm16" org.eventb.core.predicate="Int2Bool = (λi·i∈ℤ ∣ bool(i≠0))"/>
+</org.eventb.core.contextFile>

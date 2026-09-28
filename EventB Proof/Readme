@@ -1,0 +1,26 @@
+Description of the hierachy
+
+- CCSL_ctx
+	Definition of constants and sets used in all machines (Clocks, integers)
+
+- "operator"_ctx
+	Definition of constants specific to some operator (e.g. "b" in precedence)
+	
+- CCSLgeneric
+	Specification of the construction of a valid trace using CCSL formulas
+	Schedule add to chi and delta the first element without image based
+	on the parameter clock_set (valuation of ticks for each clock)
+
+- CCSL"operator"
+	Refines generic
+	Sees "operator"_ctx (or CCSLctx if no particular constants)
+	Add contraints on Schedule to allow the new chi and delta to 
+		respect the formula of the operator
+	
+
+- ASTD"operator"
+	Refines CCSL"operator" 
+		-> Proof obligation showing "concrete guard => abstract guard"
+	If needed a counter or buffer is added and it is updated according to the table of update
+		a gluing invariant is also added to link the counter or buffer to chi and delta
+	A theorem to add the proof of "abstract guard => concrete guard"

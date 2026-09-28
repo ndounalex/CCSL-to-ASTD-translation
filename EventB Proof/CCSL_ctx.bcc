@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<org.eventb.core.scContextFile org.eventb.core.accurate="true" org.eventb.core.configuration="org.eventb.core.fwd">
+    <org.eventb.core.scAxiom name="'" org.eventb.core.label="axm1" org.eventb.core.predicate="{c1,c2,c3}⊆CLOCK" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm1" org.eventb.core.theorem="false"/>
+    <org.eventb.core.scAxiom name="(" org.eventb.core.label="axm2" org.eventb.core.predicate="c1≠c2∧c2≠c3∧c3≠c1" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#set2" org.eventb.core.theorem="false"/>
+    <org.eventb.core.scAxiom name=")" org.eventb.core.label="axm4" org.eventb.core.predicate="maxint∈ℕ" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm2" org.eventb.core.theorem="false"/>
+    <org.eventb.core.scAxiom name="*" org.eventb.core.label="axm5" org.eventb.core.predicate="minint&lt;0" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm3" org.eventb.core.theorem="false"/>
+    <org.eventb.core.scAxiom name="+" org.eventb.core.label="axm6" org.eventb.core.predicate="INT_IMP=minint ‥ maxint" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm4" org.eventb.core.theorem="false"/>
+    <org.eventb.core.scAxiom name="," org.eventb.core.label="axm12" org.eventb.core.predicate="NAT_IMP=0 ‥ maxint" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm5" org.eventb.core.theorem="false"/>
+    <org.eventb.core.scAxiom name="-" org.eventb.core.label="axm13" org.eventb.core.predicate="NAT1_IMP=NAT_IMP ∖ {0}" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm6" org.eventb.core.theorem="false"/>
+    <org.eventb.core.scAxiom name="." org.eventb.core.label="axm15" org.eventb.core.predicate="maxint&gt;0" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm7" org.eventb.core.theorem="false"/>
+    <org.eventb.core.scAxiom name="/" org.eventb.core.label="axm16" org.eventb.core.predicate="Int2Bool=(λi⦂ℤ·i∈ℤ ∣ bool(i≠0))" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm8" org.eventb.core.theorem="false"/>
+    <org.eventb.core.scCarrierSet name="CLOCK" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.carrierSet#set1" org.eventb.core.type="ℙ(CLOCK)"/>
+    <org.eventb.core.scConstant name="INT_IMP" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.constant#cst6" org.eventb.core.type="ℙ(ℤ)"/>
+    <org.eventb.core.scConstant name="NAT1_IMP" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.constant#cst8" org.eventb.core.type="ℙ(ℤ)"/>
+    <org.eventb.core.scConstant name="c1" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.constant#cst1" org.eventb.core.type="CLOCK"/>
+    <org.eventb.core.scConstant name="c2" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.constant#cst2" org.eventb.core.type="CLOCK"/>
+    <org.eventb.core.scConstant name="c3" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.constant#cst3" org.eventb.core.type="CLOCK"/>
+    <org.eventb.core.scConstant name="Int2Bool" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.constant#cst9" org.eventb.core.type="ℙ(ℤ×BOOL)"/>
+    <org.eventb.core.scConstant name="NAT_IMP" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.constant#cst7" org.eventb.core.type="ℙ(ℤ)"/>
+    <org.eventb.core.scConstant name="maxint" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.constant#cst5" org.eventb.core.type="ℤ"/>
+    <org.eventb.core.scConstant name="minint" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.constant#cst4" org.eventb.core.type="ℤ"/>
+</org.eventb.core.scContextFile>

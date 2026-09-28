@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<org.eventb.core.machineFile org.eventb.core.configuration="org.eventb.core.fwd" version="5">
+    <org.eventb.core.refinesMachine name="element1" org.eventb.core.target="CCSL_generic"/>
+    <org.eventb.core.seesContext name="element1" org.eventb.core.target="periodicity_ctx"/>
+    <org.eventb.core.variable name="var1" org.eventb.core.identifier="delta"/>
+    <org.eventb.core.variable name="var2" org.eventb.core.identifier="chi"/>
+    <org.eventb.core.invariant name="inv1" org.eventb.core.label="inv1" org.eventb.core.predicate="∀n · n ∈ dom(delta) ⇒ (c1 ∈ delta(n) ⇔&#13;&#10;(c2 ∈ delta(n) ∧ ∃m · m ∈ ℕ1 ∧ chi(c2↦ n) = m ∗ p − 1))&#13;&#10;"/>
+    <org.eventb.core.event name="evt1" org.eventb.core.convergence="0" org.eventb.core.extended="true" org.eventb.core.label="INITIALISATION"/>
+    <org.eventb.core.event name="evt2" org.eventb.core.convergence="0" org.eventb.core.extended="true" org.eventb.core.label="Schedule">
+        <org.eventb.core.refinesEvent name="'" org.eventb.core.target="Schedule"/>
+        <org.eventb.core.guard name="(" org.eventb.core.label="grd2" org.eventb.core.predicate="∀i · i ∈ dom(delta ∪ {(min(ℕ1 ∖ dom(delta))) ↦ dom(clock_set ▷ {1})}) ⇒ (c1 ∈ (delta ∪ {(min(ℕ1 ∖ dom(delta))) ↦ dom(clock_set ▷ {1})})(i) ⇔&#13;&#10;(c2 ∈ (delta ∪ {(min(ℕ1 ∖ dom(delta))) ↦ dom(clock_set ▷ {1})})(i) ∧ ∃m · m ∈ ℕ1 ∧ (chi ∪ {(c↦s)↦n∣ c ∈ CLOCK ∧ s=(min(ℕ1 ∖ dom(delta))+1) ∧ n=chi(c↦(s−1))+clock_set(c) })(c2↦ i) = m ∗ p − 1))"/>
+    </org.eventb.core.event>
+</org.eventb.core.machineFile>

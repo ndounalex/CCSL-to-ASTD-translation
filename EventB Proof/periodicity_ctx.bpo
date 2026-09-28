@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<org.eventb.core.poFile org.eventb.core.poStamp="1">
+    <org.eventb.core.poPredicateSet name="ABSHYP" org.eventb.core.poStamp="0">
+        <org.eventb.core.poIdentifier name="CLOCK" org.eventb.core.type="ℙ(CLOCK)"/>
+        <org.eventb.core.poIdentifier name="INT_IMP" org.eventb.core.type="ℙ(ℤ)"/>
+        <org.eventb.core.poIdentifier name="NAT1_IMP" org.eventb.core.type="ℙ(ℤ)"/>
+        <org.eventb.core.poIdentifier name="c1" org.eventb.core.type="CLOCK"/>
+        <org.eventb.core.poIdentifier name="c2" org.eventb.core.type="CLOCK"/>
+        <org.eventb.core.poIdentifier name="c3" org.eventb.core.type="CLOCK"/>
+        <org.eventb.core.poIdentifier name="Int2Bool" org.eventb.core.type="ℙ(ℤ×BOOL)"/>
+        <org.eventb.core.poIdentifier name="NAT_IMP" org.eventb.core.type="ℙ(ℤ)"/>
+        <org.eventb.core.poIdentifier name="maxint" org.eventb.core.type="ℤ"/>
+        <org.eventb.core.poIdentifier name="minint" org.eventb.core.type="ℤ"/>
+        <org.eventb.core.poPredicate name="NAT1_IMQ" org.eventb.core.predicate="{c1,c2,c3}⊆CLOCK" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm1"/>
+        <org.eventb.core.poPredicate name="NAT1_IMR" org.eventb.core.predicate="c1≠c2∧c2≠c3∧c3≠c1" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#set2"/>
+        <org.eventb.core.poPredicate name="NAT1_IMS" org.eventb.core.predicate="maxint∈ℕ" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm2"/>
+        <org.eventb.core.poPredicate name="NAT1_IMT" org.eventb.core.predicate="minint&lt;0" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm3"/>
+        <org.eventb.core.poPredicate name="NAT1_IMU" org.eventb.core.predicate="INT_IMP=minint ‥ maxint" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm4"/>
+        <org.eventb.core.poPredicate name="NAT1_IMV" org.eventb.core.predicate="NAT_IMP=0 ‥ maxint" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm5"/>
+        <org.eventb.core.poPredicate name="NAT1_IMW" org.eventb.core.predicate="NAT1_IMP=NAT_IMP ∖ {0}" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm6"/>
+        <org.eventb.core.poPredicate name="NAT1_IMX" org.eventb.core.predicate="maxint&gt;0" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm7"/>
+        <org.eventb.core.poPredicate name="NAT1_IMY" org.eventb.core.predicate="Int2Bool=(λi⦂ℤ·i∈ℤ ∣ bool(i≠0))" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm8"/>
+        <org.eventb.core.poIdentifier name="p" org.eventb.core.type="ℤ"/>
+    </org.eventb.core.poPredicateSet>
+    <org.eventb.core.poPredicateSet name="ALLHYP" org.eventb.core.parentSet="/proofAlexCCSL/periodicity_ctx.bpo|org.eventb.core.poFile#periodicity_ctx|org.eventb.core.poPredicateSet#ABSHYP" org.eventb.core.poStamp="1">
+        <org.eventb.core.poPredicate name="PRD0" org.eventb.core.predicate="p∈NAT1_IMP" org.eventb.core.source="/proofAlexCCSL/periodicity_ctx.buc|org.eventb.core.contextFile#periodicity_ctx|org.eventb.core.axiom#)"/>
+    </org.eventb.core.poPredicateSet>
+</org.eventb.core.poFile>

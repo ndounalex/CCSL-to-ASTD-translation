@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<org.eventb.core.machineFile org.eventb.core.configuration="org.eventb.core.fwd" version="5">
+    <org.eventb.core.seesContext name="element1" org.eventb.core.target="CCSL_ctx"/>
+    <org.eventb.core.variable name="var1" org.eventb.core.identifier="chi"/>
+    <org.eventb.core.variable name="var2" org.eventb.core.identifier="delta"/>
+    <org.eventb.core.invariant name="inv1" org.eventb.core.label="inv1" org.eventb.core.predicate="∀clock_set · (clock_set ∈ CLOCK → {0,1} ⇒ &#13;&#10;&#9;((∀n · n ∈ dom(delta ∪ {(min(ℕ1 ∖ dom(delta))) ↦ dom(clock_set ▷ {1})}) ⇒  &#13;&#10;&#9;&#9; &#9; (c1 ∈ (delta ∪ {(min(ℕ1 ∖ dom(delta))) ↦ dom(clock_set ▷ {1})})(n) ⇔ &#13;&#10;&#9;&#9; &#9; &#9;( c2 ∈ (delta ∪ {(min(ℕ1 ∖ dom(delta))) ↦ dom(clock_set ▷ {1})})(n) &#13;&#10;&#9;&#9;&#9;&#9;∨ c3 ∈ (delta ∪ {(min(ℕ1 ∖ dom(delta))) ↦ dom(clock_set ▷ {1})})(n))))&#13;&#10;&#9;⇒&#13;&#10;&#9;(Int2Bool(clock_set(c1)) = bool(clock_set(c2)=1 ∨ clock_set(c3)=1)))&#13;&#10; &#13;&#10;)" org.eventb.core.theorem="true"/>
+    <org.eventb.core.event name="evt1" org.eventb.core.convergence="0" org.eventb.core.extended="true" org.eventb.core.label="INITIALISATION"/>
+    <org.eventb.core.event name="evt2" org.eventb.core.convergence="0" org.eventb.core.extended="true" org.eventb.core.label="Schedule">
+        <org.eventb.core.refinesEvent name="'" org.eventb.core.target="Schedule"/>
+        <org.eventb.core.guard name="(" org.eventb.core.label="grd3" org.eventb.core.predicate="Int2Bool(clock_set(c1)) = bool(clock_set(c2)=1 ∨ clock_set(c3)=1)&#13;&#10;"/>
+    </org.eventb.core.event>
+    <org.eventb.core.refinesMachine name="element2" org.eventb.core.target="CCSLunion"/>
+</org.eventb.core.machineFile>

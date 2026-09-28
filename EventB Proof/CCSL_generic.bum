@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<org.eventb.core.machineFile org.eventb.core.configuration="org.eventb.core.fwd" version="5">
+    <org.eventb.core.event name="'" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="INITIALISATION">
+        <org.eventb.core.action name="'" org.eventb.core.assignment="chi ≔ CLOCK × {1} × {0}" org.eventb.core.label="act1"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="delta ≔ ∅" org.eventb.core.label="act2"/>
+    </org.eventb.core.event>
+    <org.eventb.core.variable name="(" org.eventb.core.identifier="chi"/>
+    <org.eventb.core.variable name=")" org.eventb.core.identifier="delta"/>
+    <org.eventb.core.invariant name="*" org.eventb.core.label="inv1" org.eventb.core.predicate="chi ∈ (CLOCK × ℕ1) ⇸ ℕ"/>
+    <org.eventb.core.invariant name="+" org.eventb.core.label="inv2" org.eventb.core.predicate="delta ∈ ℕ1 ⇸ ℙ(CLOCK)"/>
+    <org.eventb.core.seesContext name="," org.eventb.core.target="CCSL_ctx"/>
+    <org.eventb.core.invariant name="-" org.eventb.core.label="inv3" org.eventb.core.predicate="∃n · n ∈ ℕ ∧ dom(delta)∪{0}=0‥n "/>
+    <org.eventb.core.invariant name="." org.eventb.core.label="inv4" org.eventb.core.predicate="∃n · n ∈ ℕ ∧ dom(chi) = CLOCK × 1‥n ∧ n=min(ℕ1∖dom(delta))"/>
+    <org.eventb.core.invariant name="/" org.eventb.core.label="inv5" org.eventb.core.predicate="∀c · c∈CLOCK ⇒ ( chi(c↦1)=0 ∧ (&#13;&#10;&#9; ∀i · i ∈ dom(delta) ⇒ (&#13;&#10;&#9;&#9;(c∈delta(i) ⇒ chi(c↦i+1) = chi(c↦i) +1) ∧&#13;&#10;&#9;&#9;(c∉delta(i) ⇒ chi(c↦i+1) = chi(c↦i)) )))&#13;&#10;"/>
+    <org.eventb.core.event name="0" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="Schedule">
+        <org.eventb.core.parameter name="'" org.eventb.core.identifier="clock_set"/>
+        <org.eventb.core.guard name="(" org.eventb.core.label="grd1" org.eventb.core.predicate="clock_set ∈ CLOCK → {0,1}"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="delta ≔  delta ∪  {(min(ℕ1 ∖ dom(delta))) ↦ dom(clock_set ▷ {1})}" org.eventb.core.label="act1"/>
+        <org.eventb.core.action name="*" org.eventb.core.assignment="chi ≔ chi ∪  {(c↦s)↦n∣ c ∈ CLOCK ∧ s=(min(ℕ1 ∖ dom(delta))+1) ∧ n=chi(c↦(s−1))+clock_set(c) }" org.eventb.core.label="act2"/>
+    </org.eventb.core.event>
+    <org.eventb.core.invariant name="1" org.eventb.core.label="inv6" org.eventb.core.predicate="∀c · ∀i · ∀j · c↦i ∈ dom(chi) ∧ c↦j ∈ dom(chi) ∧ i ≤ j ⇒ chi(c ↦ i) ≤ chi(c↦j)"/>
+</org.eventb.core.machineFile>

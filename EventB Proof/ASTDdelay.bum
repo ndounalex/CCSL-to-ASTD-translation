@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<org.eventb.core.machineFile org.eventb.core.configuration="org.eventb.core.fwd" version="5">
+    <org.eventb.core.refinesMachine name="element1" org.eventb.core.target="CCSLdelay"/>
+    <org.eventb.core.seesContext name="element1" org.eventb.core.target="delay_ctx"/>
+    <org.eventb.core.variable name="var1" org.eventb.core.identifier="chi"/>
+    <org.eventb.core.variable name="var2" org.eventb.core.identifier="delta"/>
+    <org.eventb.core.variable name="var3" org.eventb.core.identifier="buffer"/>
+    <org.eventb.core.invariant name="inv1" org.eventb.core.label="inv1" org.eventb.core.predicate="buffer ∈ 0‥(d) → {0,1}"/>
+    <org.eventb.core.invariant name="inv2" org.eventb.core.label="inv2" org.eventb.core.predicate="∀i · i∈dom(buffer) ⇒ (buffer(i) =1 ⇔ (∃m · m∈dom(delta) ∧ c2∈ delta(m) ∧ chi(c3↦min(ℕ1 ∖ dom(delta))) − chi(c3↦m) = i))  "/>
+    <org.eventb.core.invariant name="inv3" org.eventb.core.label="inv3" org.eventb.core.predicate="∀clock_set·(clock_set ∈ CLOCK → {0,1} ⇒ (&#13;&#10;&#9;(∀n · n∈dom(delta ∪ {(min(ℕ1 ∖ dom(delta))) ↦ dom(clock_set ▷ {1})}) ⇒ (&#13;&#10;&#9;&#9; &#9;     &#9;c1 ∈ (delta ∪ {(min(ℕ1 ∖ dom(delta))) ↦ dom(clock_set ▷ {1})})(n) ⇔ (c3 ∈ (delta ∪ {(min(ℕ1 ∖ dom(delta))) ↦ dom(clock_set ▷ {1})})(n) ∧ (∃m · m∈ dom(delta ∪ {(min(ℕ1 ∖ dom(delta))) ↦ dom(clock_set ▷ {1})})∧&#13;&#10;&#9;&#9; &#9;     &#9;c2 ∈ (delta ∪ {(min(ℕ1 ∖ dom(delta))) ↦ dom(clock_set ▷ {1})})(m) ∧ chi(c3↦ n) − chi(c3↦ m) = d)))&#13;&#10;&#9;&#9; &#9;     &#9;)&#13;&#10;⇒ &#13;&#10;&#9;( (clock_set(c1)=1 ⇔ (clock_set(c3)=1 ∧ buffer(d) = 1))))&#13;&#10;) " org.eventb.core.theorem="true"/>
+    <org.eventb.core.event name="evt1" org.eventb.core.convergence="0" org.eventb.core.extended="true" org.eventb.core.label="INITIALISATION">
+        <org.eventb.core.action name="'" org.eventb.core.assignment="buffer≔ 0‥d × {0}" org.eventb.core.label="act3"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="evt2" org.eventb.core.convergence="0" org.eventb.core.extended="true" org.eventb.core.label="Schedule">
+        <org.eventb.core.refinesEvent name="'" org.eventb.core.target="Schedule"/>
+        <org.eventb.core.guard name="(" org.eventb.core.label="grd3" org.eventb.core.predicate="(clock_set(c1)=1 ⇔ (clock_set(c3)=1 ∧ buffer(d) = 1))"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="buffer ≔ {&#9;0 ↦ (buffer  {0 ↦ max({clock_set(c2),buffer(0)})}) , &#13;&#10;&#9;&#9;&#9;1 ↦ (shift_buffer(buffer)  {1↦max({clock_set(c2),buffer(0)})}) }(clock_set(c3))" org.eventb.core.label="act3"/>
+    </org.eventb.core.event>
+</org.eventb.core.machineFile>
