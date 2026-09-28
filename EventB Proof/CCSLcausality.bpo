@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<org.eventb.core.poFile org.eventb.core.poStamp="1">
+    <org.eventb.core.poPredicateSet name="CTXHYP" org.eventb.core.poStamp="0">
+        <org.eventb.core.poIdentifier name="CLOCK" org.eventb.core.type="ℙ(CLOCK)"/>
+        <org.eventb.core.poIdentifier name="INT_IMP" org.eventb.core.type="ℙ(ℤ)"/>
+        <org.eventb.core.poIdentifier name="NAT1_IMP" org.eventb.core.type="ℙ(ℤ)"/>
+        <org.eventb.core.poIdentifier name="c1" org.eventb.core.type="CLOCK"/>
+        <org.eventb.core.poIdentifier name="c2" org.eventb.core.type="CLOCK"/>
+        <org.eventb.core.poIdentifier name="c3" org.eventb.core.type="CLOCK"/>
+        <org.eventb.core.poIdentifier name="Int2Bool" org.eventb.core.type="ℙ(ℤ×BOOL)"/>
+        <org.eventb.core.poIdentifier name="NAT_IMP" org.eventb.core.type="ℙ(ℤ)"/>
+        <org.eventb.core.poIdentifier name="maxint" org.eventb.core.type="ℤ"/>
+        <org.eventb.core.poIdentifier name="minint" org.eventb.core.type="ℤ"/>
+        <org.eventb.core.poPredicate name="NAT1_IMQ" org.eventb.core.predicate="{c1,c2,c3}⊆CLOCK" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm1"/>
+        <org.eventb.core.poPredicate name="NAT1_IMR" org.eventb.core.predicate="c1≠c2∧c2≠c3∧c3≠c1" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#set2"/>
+        <org.eventb.core.poPredicate name="NAT1_IMS" org.eventb.core.predicate="maxint∈ℕ" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm2"/>
+        <org.eventb.core.poPredicate name="NAT1_IMT" org.eventb.core.predicate="minint&lt;0" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm3"/>
+        <org.eventb.core.poPredicate name="NAT1_IMU" org.eventb.core.predicate="INT_IMP=minint ‥ maxint" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm4"/>
+        <org.eventb.core.poPredicate name="NAT1_IMV" org.eventb.core.predicate="NAT_IMP=0 ‥ maxint" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm5"/>
+        <org.eventb.core.poPredicate name="NAT1_IMW" org.eventb.core.predicate="NAT1_IMP=NAT_IMP ∖ {0}" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm6"/>
+        <org.eventb.core.poPredicate name="NAT1_IMX" org.eventb.core.predicate="maxint&gt;0" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm7"/>
+        <org.eventb.core.poPredicate name="NAT1_IMY" org.eventb.core.predicate="Int2Bool=(λi⦂ℤ·i∈ℤ ∣ bool(i≠0))" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm8"/>
+    </org.eventb.core.poPredicateSet>
+    <org.eventb.core.poPredicateSet name="ABSHYP" org.eventb.core.parentSet="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poPredicateSet#CTXHYP" org.eventb.core.poStamp="1">
+        <org.eventb.core.poIdentifier name="chi" org.eventb.core.type="ℙ(CLOCK×ℤ×ℤ)"/>
+        <org.eventb.core.poIdentifier name="delta" org.eventb.core.type="ℙ(ℤ×ℙ(CLOCK))"/>
+        <org.eventb.core.poPredicate name="deltb" org.eventb.core.predicate="chi∈CLOCK × ℕ1 ⇸ ℕ" org.eventb.core.source="/proofAlexCCSL/CCSL_generic.bum|org.eventb.core.machineFile#CCSL_generic|org.eventb.core.invariant#*"/>
+        <org.eventb.core.poPredicate name="deltc" org.eventb.core.predicate="delta∈ℕ1 ⇸ ℙ(CLOCK)" org.eventb.core.source="/proofAlexCCSL/CCSL_generic.bum|org.eventb.core.machineFile#CCSL_generic|org.eventb.core.invariant#+"/>
+        <org.eventb.core.poPredicate name="deltd" org.eventb.core.predicate="∃n⦂ℤ·n∈ℕ∧dom(delta)∪{0}=0 ‥ n" org.eventb.core.source="/proofAlexCCSL/CCSL_generic.bum|org.eventb.core.machineFile#CCSL_generic|org.eventb.core.invariant#-"/>
+        <org.eventb.core.poPredicate name="delte" org.eventb.core.predicate="∃n⦂ℤ·n∈ℕ∧dom(chi)=CLOCK × 1 ‥ n∧n=min(ℕ1 ∖ dom(delta))" org.eventb.core.source="/proofAlexCCSL/CCSL_generic.bum|org.eventb.core.machineFile#CCSL_generic|org.eventb.core.invariant#."/>
+        <org.eventb.core.poPredicate name="deltf" org.eventb.core.predicate="∀c⦂CLOCK·c∈CLOCK⇒chi(c ↦ 1)=0∧(∀i⦂ℤ·i∈dom(delta)⇒(c∈delta(i)⇒chi(c ↦ i+1)=chi(c ↦ i)+1)∧(c∉delta(i)⇒chi(c ↦ i+1)=chi(c ↦ i)))" org.eventb.core.source="/proofAlexCCSL/CCSL_generic.bum|org.eventb.core.machineFile#CCSL_generic|org.eventb.core.invariant#\/"/>
+        <org.eventb.core.poPredicate name="deltg" org.eventb.core.predicate="∀c⦂CLOCK·∀i⦂ℤ·∀j⦂ℤ·c ↦ i∈dom(chi)∧c ↦ j∈dom(chi)∧i≤j⇒chi(c ↦ i)≤chi(c ↦ j)" org.eventb.core.source="/proofAlexCCSL/CCSL_generic.bum|org.eventb.core.machineFile#CCSL_generic|org.eventb.core.invariant#1"/>
+    </org.eventb.core.poPredicateSet>
+    <org.eventb.core.poSequent name="inv1/WD" org.eventb.core.accurate="true" org.eventb.core.poDesc="Well-definedness of Invariant" org.eventb.core.poStamp="1">
+        <org.eventb.core.poPredicateSet name="SEQHYP" org.eventb.core.parentSet="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poPredicateSet#ABSHYP"/>
+        <org.eventb.core.poPredicate name="SEQHYQ" org.eventb.core.predicate="∀n⦂ℤ·n∈ran(dom(chi))⇒c1 ↦ n∈dom(chi)∧chi∈CLOCK × ℤ ⇸ ℤ∧c2 ↦ n∈dom(chi)" org.eventb.core.source="/proofAlexCCSL/CCSLcausality.bum|org.eventb.core.machineFile#CCSLcausality|org.eventb.core.invariant#,"/>
+        <org.eventb.core.poSource name="SEQHYR" org.eventb.core.poRole="DEFAULT" org.eventb.core.source="/proofAlexCCSL/CCSLcausality.bum|org.eventb.core.machineFile#CCSLcausality|org.eventb.core.invariant#,"/>
+        <org.eventb.core.poSelHint name="SEQHYS" org.eventb.core.poSelHintFst="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poPredicateSet#ABSHYP" org.eventb.core.poSelHintSnd="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poPredicateSet#ABSHYP"/>
+    </org.eventb.core.poSequent>
+    <org.eventb.core.poSequent name="INITIALISATION/inv1/INV" org.eventb.core.accurate="true" org.eventb.core.poDesc="Invariant  establishment" org.eventb.core.poStamp="1">
+        <org.eventb.core.poPredicateSet name="SEQHYP" org.eventb.core.parentSet="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poPredicateSet#EVTALLHYPCCSL_cu("/>
+        <org.eventb.core.poPredicate name="SEQHYQ" org.eventb.core.predicate="∀n⦂ℤ·n∈ran(dom(CLOCK × {1} × {0}))⇒(CLOCK × {1} × {0})(c1 ↦ n)≥(CLOCK × {1} × {0})(c2 ↦ n)" org.eventb.core.source="/proofAlexCCSL/CCSLcausality.bum|org.eventb.core.machineFile#CCSLcausality|org.eventb.core.invariant#,"/>
+        <org.eventb.core.poSource name="SEQHYR" org.eventb.core.poRole="ABSTRACT" org.eventb.core.source="/proofAlexCCSL/CCSL_generic.bum|org.eventb.core.machineFile#CCSL_generic|org.eventb.core.event#'"/>
+        <org.eventb.core.poSource name="SEQHYS" org.eventb.core.poRole="CONCRETE" org.eventb.core.source="/proofAlexCCSL/CCSLcausality.bum|org.eventb.core.machineFile#CCSLcausality|org.eventb.core.event#'"/>
+        <org.eventb.core.poSource name="SEQHYT" org.eventb.core.poRole="DEFAULT" org.eventb.core.source="/proofAlexCCSL/CCSLcausality.bum|org.eventb.core.machineFile#CCSLcausality|org.eventb.core.invariant#,"/>
+        <org.eventb.core.poSelHint name="SEQHYU" org.eventb.core.poSelHintFst="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poPredicateSet#CTXHYP" org.eventb.core.poSelHintSnd="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poSequent#INITIALISATION\/inv1\/INV|org.eventb.core.poPredicateSet#SEQHYP"/>
+        <org.eventb.core.poSelHint name="SEQHYV" org.eventb.core.poSelHintFst="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poPredicateSet#ALLHYP|org.eventb.core.poPredicate#PRD0"/>
+    </org.eventb.core.poSequent>
+    <org.eventb.core.poPredicateSet name="EVTIDENTCCSL_cu(" org.eventb.core.parentSet="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poPredicateSet#CTXHYP" org.eventb.core.poStamp="1">
+        <org.eventb.core.poIdentifier name="chi'" org.eventb.core.type="ℙ(CLOCK×ℤ×ℤ)"/>
+        <org.eventb.core.poIdentifier name="delta'" org.eventb.core.type="ℙ(ℤ×ℙ(CLOCK))"/>
+    </org.eventb.core.poPredicateSet>
+    <org.eventb.core.poPredicateSet name="EVTALLHYPCCSL_cu(" org.eventb.core.parentSet="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poPredicateSet#EVTIDENTCCSL_cu(" org.eventb.core.poStamp="1"/>
+    <org.eventb.core.poSequent name="Schedule/grd2/WD" org.eventb.core.accurate="true" org.eventb.core.poDesc="Well-definedness of Guard" org.eventb.core.poStamp="1">
+        <org.eventb.core.poPredicateSet name="SEQHYP" org.eventb.core.parentSet="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poPredicateSet#EVTHYPCCSL_cu)'"/>
+        <org.eventb.core.poPredicate name="SEQHYQ" org.eventb.core.predicate="∀n⦂ℤ·ℕ1 ∖ dom(delta)≠(∅ ⦂ ℙ(ℤ))∧(∃b⦂ℤ·∀x⦂ℤ·x∈ℕ1 ∖ dom(delta)⇒b≤x)∧(n∈1 ‥ min(ℕ1 ∖ dom(delta))+1⇒(∀c⦂CLOCK,s⦂ℤ·c∈CLOCK∧s=min(ℕ1 ∖ dom(delta))+1⇒c ↦ s − 1∈dom(chi)∧chi∈CLOCK × ℤ ⇸ ℤ∧c∈dom(clock_set)∧clock_set∈CLOCK ⇸ ℤ)∧c1 ↦ n∈dom(chi∪{c⦂CLOCK,s⦂ℤ,x⦂ℤ·c∈CLOCK∧s=min(ℕ1 ∖ dom(delta))+1∧x=chi(c ↦ s − 1)+clock_set(c) ∣ c ↦ s ↦ x})∧chi∪{c⦂CLOCK,s⦂ℤ,x⦂ℤ·c∈CLOCK∧s=min(ℕ1 ∖ dom(delta))+1∧x=chi(c ↦ s − 1)+clock_set(c) ∣ c ↦ s ↦ x}∈CLOCK × ℤ ⇸ ℤ∧c2 ↦ n∈dom(chi∪{c⦂CLOCK,s⦂ℤ,x⦂ℤ·c∈CLOCK∧s=min(ℕ1 ∖ dom(delta))+1∧x=chi(c ↦ s − 1)+clock_set(c) ∣ c ↦ s ↦ x}))" org.eventb.core.source="/proofAlexCCSL/CCSLcausality.bum|org.eventb.core.machineFile#CCSLcausality|org.eventb.core.event#+|org.eventb.core.guard#("/>
+        <org.eventb.core.poSource name="SEQHYR" org.eventb.core.poRole="DEFAULT" org.eventb.core.source="/proofAlexCCSL/CCSLcausality.bum|org.eventb.core.machineFile#CCSLcausality|org.eventb.core.event#+|org.eventb.core.guard#("/>
+        <org.eventb.core.poSelHint name="SEQHYS" org.eventb.core.poSelHintFst="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poPredicateSet#ALLHYP" org.eventb.core.poSelHintSnd="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poPredicateSet#EVTHYPCCSL_cu)'"/>
+    </org.eventb.core.poSequent>
+    <org.eventb.core.poSequent name="Schedule/inv1/INV" org.eventb.core.accurate="true" org.eventb.core.poDesc="Invariant  preservation" org.eventb.core.poStamp="1">
+        <org.eventb.core.poPredicateSet name="SEQHYP" org.eventb.core.parentSet="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poPredicateSet#EVTALLHYPCCSL_cu)"/>
+        <org.eventb.core.poPredicate name="SEQHYQ" org.eventb.core.predicate="∀n⦂ℤ·n∈ran(dom(chi∪{c⦂CLOCK,s⦂ℤ,n⦂ℤ·c∈CLOCK∧s=min(ℕ1 ∖ dom(delta))+1∧n=chi(c ↦ s − 1)+clock_set(c) ∣ c ↦ s ↦ n}))⇒(chi∪{c⦂CLOCK,s⦂ℤ,n⦂ℤ·c∈CLOCK∧s=min(ℕ1 ∖ dom(delta))+1∧n=chi(c ↦ s − 1)+clock_set(c) ∣ c ↦ s ↦ n})(c1 ↦ n)≥(chi∪{c⦂CLOCK,s⦂ℤ,n⦂ℤ·c∈CLOCK∧s=min(ℕ1 ∖ dom(delta))+1∧n=chi(c ↦ s − 1)+clock_set(c) ∣ c ↦ s ↦ n})(c2 ↦ n)" org.eventb.core.source="/proofAlexCCSL/CCSLcausality.bum|org.eventb.core.machineFile#CCSLcausality|org.eventb.core.invariant#,"/>
+        <org.eventb.core.poSource name="SEQHYR" org.eventb.core.poRole="ABSTRACT" org.eventb.core.source="/proofAlexCCSL/CCSL_generic.bum|org.eventb.core.machineFile#CCSL_generic|org.eventb.core.event#0"/>
+        <org.eventb.core.poSource name="SEQHYS" org.eventb.core.poRole="CONCRETE" org.eventb.core.source="/proofAlexCCSL/CCSLcausality.bum|org.eventb.core.machineFile#CCSLcausality|org.eventb.core.event#+"/>
+        <org.eventb.core.poSource name="SEQHYT" org.eventb.core.poRole="DEFAULT" org.eventb.core.source="/proofAlexCCSL/CCSLcausality.bum|org.eventb.core.machineFile#CCSLcausality|org.eventb.core.invariant#,"/>
+        <org.eventb.core.poSelHint name="SEQHYU" org.eventb.core.poSelHintFst="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poPredicateSet#ALLHYP" org.eventb.core.poSelHintSnd="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poSequent#Schedule\/inv1\/INV|org.eventb.core.poPredicateSet#SEQHYP"/>
+        <org.eventb.core.poSelHint name="SEQHYV" org.eventb.core.poSelHintFst="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poPredicateSet#ALLHYP|org.eventb.core.poPredicate#PRD0"/>
+    </org.eventb.core.poSequent>
+    <org.eventb.core.poPredicateSet name="EVTIDENTCCSL_cu)" org.eventb.core.parentSet="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poPredicateSet#ALLHYP" org.eventb.core.poStamp="0">
+        <org.eventb.core.poIdentifier name="chi'" org.eventb.core.type="ℙ(CLOCK×ℤ×ℤ)"/>
+        <org.eventb.core.poIdentifier name="clock_set" org.eventb.core.type="ℙ(CLOCK×ℤ)"/>
+        <org.eventb.core.poIdentifier name="delta'" org.eventb.core.type="ℙ(ℤ×ℙ(CLOCK))"/>
+    </org.eventb.core.poPredicateSet>
+    <org.eventb.core.poPredicateSet name="EVTHYPCCSL_cu)'" org.eventb.core.parentSet="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poPredicateSet#EVTIDENTCCSL_cu)" org.eventb.core.poStamp="0">
+        <org.eventb.core.poPredicate name="PRD0" org.eventb.core.predicate="clock_set∈CLOCK → {0,1}" org.eventb.core.source="/proofAlexCCSL/CCSL_generic.bum|org.eventb.core.machineFile#CCSL_generic|org.eventb.core.event#0|org.eventb.core.guard#("/>
+    </org.eventb.core.poPredicateSet>
+    <org.eventb.core.poPredicateSet name="EVTALLHYPCCSL_cu)" org.eventb.core.parentSet="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poPredicateSet#EVTHYPCCSL_cu)'" org.eventb.core.poStamp="0">
+        <org.eventb.core.poPredicate name="PRD1" org.eventb.core.predicate="∀n⦂ℤ·n∈1 ‥ min(ℕ1 ∖ dom(delta))+1⇒(chi∪{c⦂CLOCK,s⦂ℤ,x⦂ℤ·c∈CLOCK∧s=min(ℕ1 ∖ dom(delta))+1∧x=chi(c ↦ s − 1)+clock_set(c) ∣ c ↦ s ↦ x})(c1 ↦ n)≥(chi∪{c⦂CLOCK,s⦂ℤ,x⦂ℤ·c∈CLOCK∧s=min(ℕ1 ∖ dom(delta))+1∧x=chi(c ↦ s − 1)+clock_set(c) ∣ c ↦ s ↦ x})(c2 ↦ n)" org.eventb.core.source="/proofAlexCCSL/CCSLcausality.bum|org.eventb.core.machineFile#CCSLcausality|org.eventb.core.event#+|org.eventb.core.guard#("/>
+    </org.eventb.core.poPredicateSet>
+    <org.eventb.core.poPredicateSet name="ALLHYP" org.eventb.core.parentSet="/proofAlexCCSL/CCSLcausality.bpo|org.eventb.core.poFile#CCSLcausality|org.eventb.core.poPredicateSet#ABSHYP" org.eventb.core.poStamp="1">
+        <org.eventb.core.poPredicate name="PRD0" org.eventb.core.predicate="∀n⦂ℤ·n∈ran(dom(chi))⇒chi(c1 ↦ n)≥chi(c2 ↦ n)" org.eventb.core.source="/proofAlexCCSL/CCSLcausality.bum|org.eventb.core.machineFile#CCSLcausality|org.eventb.core.invariant#,"/>
+    </org.eventb.core.poPredicateSet>
+</org.eventb.core.poFile>
