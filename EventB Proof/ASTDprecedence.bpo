@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<org.eventb.core.poFile org.eventb.core.poStamp="1">
-    <org.eventb.core.poPredicateSet name="CTXHYP" org.eventb.core.poStamp="0">
+<org.eventb.core.poFile org.eventb.core.poStamp="2">
+    <org.eventb.core.poPredicateSet name="CTXHYP" org.eventb.core.poStamp="2">
         <org.eventb.core.poIdentifier name="CLOCK" org.eventb.core.type="ℙ(CLOCK)"/>
         <org.eventb.core.poIdentifier name="INT_IMP" org.eventb.core.type="ℙ(ℤ)"/>
         <org.eventb.core.poIdentifier name="NAT1_IMP" org.eventb.core.type="ℙ(ℤ)"/>
@@ -21,9 +21,9 @@
         <org.eventb.core.poPredicate name="NAT1_IMX" org.eventb.core.predicate="maxint&gt;0" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm7"/>
         <org.eventb.core.poPredicate name="NAT1_IMY" org.eventb.core.predicate="Int2Bool=(λi⦂ℤ·i∈ℤ ∣ bool(i≠0))" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm8"/>
         <org.eventb.core.poIdentifier name="b" org.eventb.core.type="ℤ"/>
-        <org.eventb.core.poPredicate name="NAT1_IMZ" org.eventb.core.predicate="b∈INT_IMP" org.eventb.core.source="/proofAlexCCSL/precedence_ctx.buc|org.eventb.core.contextFile#precedence_ctx|org.eventb.core.axiom#)"/>
+        <org.eventb.core.poPredicate name="NAT1_IMZ" org.eventb.core.predicate="b∈NAT_IMP" org.eventb.core.source="/proofAlexCCSL/precedence_ctx.buc|org.eventb.core.contextFile#precedence_ctx|org.eventb.core.axiom#)"/>
     </org.eventb.core.poPredicateSet>
-    <org.eventb.core.poPredicateSet name="ABSHYP" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#CTXHYP" org.eventb.core.poStamp="1">
+    <org.eventb.core.poPredicateSet name="ABSHYP" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#CTXHYP" org.eventb.core.poStamp="2">
         <org.eventb.core.poIdentifier name="chi" org.eventb.core.type="ℙ(CLOCK×ℤ×ℤ)"/>
         <org.eventb.core.poIdentifier name="ctr" org.eventb.core.type="ℤ"/>
         <org.eventb.core.poIdentifier name="delta" org.eventb.core.type="ℙ(ℤ×ℙ(CLOCK))"/>
@@ -35,25 +35,25 @@
         <org.eventb.core.poPredicate name="deltg" org.eventb.core.predicate="∀c⦂CLOCK·∀i⦂ℤ·∀j⦂ℤ·c ↦ i∈dom(chi)∧c ↦ j∈dom(chi)∧i≤j⇒chi(c ↦ i)≤chi(c ↦ j)" org.eventb.core.source="/proofAlexCCSL/CCSL_generic.bum|org.eventb.core.machineFile#CCSL_generic|org.eventb.core.invariant#1"/>
         <org.eventb.core.poPredicate name="delth" org.eventb.core.predicate="∀n⦂ℤ·n∈dom(delta)⇒(chi(c2 ↦ n) − chi(c1 ↦ n)=b⇒c2∉delta(n))" org.eventb.core.source="/proofAlexCCSL/CCSLprecedence.bum|org.eventb.core.machineFile#CCSLprecedence|org.eventb.core.invariant#+"/>
     </org.eventb.core.poPredicateSet>
-    <org.eventb.core.poSequent name="inv2/WD" org.eventb.core.accurate="true" org.eventb.core.poDesc="Well-definedness of Invariant" org.eventb.core.poStamp="1">
+    <org.eventb.core.poSequent name="inv2/WD" org.eventb.core.accurate="true" org.eventb.core.poDesc="Well-definedness of Invariant" org.eventb.core.poStamp="2">
         <org.eventb.core.poPredicateSet name="SEQHYP" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#HYPprecedence_ctz"/>
         <org.eventb.core.poPredicate name="SEQHYQ" org.eventb.core.predicate="ℕ1 ∖ dom(delta)≠(∅ ⦂ ℙ(ℤ))∧(∃b⦂ℤ·∀x⦂ℤ·x∈ℕ1 ∖ dom(delta)⇒b≤x)∧c2 ↦ min(ℕ1 ∖ dom(delta))∈dom(chi)∧chi∈CLOCK × ℤ ⇸ ℤ∧c1 ↦ min(ℕ1 ∖ dom(delta))∈dom(chi)" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.invariant#\/"/>
         <org.eventb.core.poSource name="SEQHYR" org.eventb.core.poRole="DEFAULT" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.invariant#\/"/>
         <org.eventb.core.poSelHint name="SEQHYS" org.eventb.core.poSelHintFst="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#ABSHYP" org.eventb.core.poSelHintSnd="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#HYPprecedence_ctz"/>
     </org.eventb.core.poSequent>
-    <org.eventb.core.poSequent name="inv3/WD" org.eventb.core.accurate="true" org.eventb.core.poDesc="Well-definedness of Theorem" org.eventb.core.poStamp="1">
+    <org.eventb.core.poSequent name="inv3/WD" org.eventb.core.accurate="true" org.eventb.core.poDesc="Well-definedness of Theorem" org.eventb.core.poStamp="2">
         <org.eventb.core.poPredicateSet name="SEQHYP" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#HYPprecedence_ct{"/>
         <org.eventb.core.poPredicate name="SEQHYQ" org.eventb.core.predicate="∀clock_set⦂ℙ(CLOCK×ℤ)·clock_set∈CLOCK → {0,1}⇒(∀n⦂ℤ·ℕ1 ∖ dom(delta)≠(∅ ⦂ ℙ(ℤ))∧(∃b⦂ℤ·∀x⦂ℤ·x∈ℕ1 ∖ dom(delta)⇒b≤x)∧(n∈1 ‥ min(ℕ1 ∖ dom(delta))⇒c2 ↦ n∈dom(chi)∧chi∈CLOCK × ℤ ⇸ ℤ∧c1 ↦ n∈dom(chi)∧(chi(c2 ↦ n) − chi(c1 ↦ n)∈INT_IMP⇒chi(c2 ↦ n) − chi(c1 ↦ n)≠b∨(ℕ1 ∖ dom(delta)≠(∅ ⦂ ℙ(ℤ))∧(∃b⦂ℤ·∀x⦂ℤ·x∈ℕ1 ∖ dom(delta)⇒b≤x)∧n∈dom(delta∪{min(ℕ1 ∖ dom(delta)) ↦ dom(clock_set ▷ {1})})∧delta∪{min(ℕ1 ∖ dom(delta)) ↦ dom(clock_set ▷ {1})}∈ℤ ⇸ ℙ(CLOCK)))))∧((∀n⦂ℤ·n∈1 ‥ min(ℕ1 ∖ dom(delta))⇒chi(c2 ↦ n) − chi(c1 ↦ n)∈INT_IMP∧(chi(c2 ↦ n) − chi(c1 ↦ n)≠b∨c2∉(delta∪{min(ℕ1 ∖ dom(delta)) ↦ dom(clock_set ▷ {1})})(n)))⇒ctr≠b∨(c2∈dom(clock_set)∧clock_set∈CLOCK ⇸ ℤ))" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.invariant#0"/>
         <org.eventb.core.poSource name="SEQHYR" org.eventb.core.poRole="DEFAULT" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.invariant#0"/>
         <org.eventb.core.poSelHint name="SEQHYS" org.eventb.core.poSelHintFst="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#ABSHYP" org.eventb.core.poSelHintSnd="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#HYPprecedence_ct{"/>
     </org.eventb.core.poSequent>
-    <org.eventb.core.poSequent name="inv3/THM" org.eventb.core.accurate="true" org.eventb.core.poDesc="Theorem" org.eventb.core.poStamp="1">
+    <org.eventb.core.poSequent name="inv3/THM" org.eventb.core.accurate="true" org.eventb.core.poDesc="Theorem" org.eventb.core.poStamp="2">
         <org.eventb.core.poPredicateSet name="SEQHYP" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#HYPprecedence_ct{"/>
         <org.eventb.core.poPredicate name="SEQHYQ" org.eventb.core.predicate="∀clock_set⦂ℙ(CLOCK×ℤ)·clock_set∈CLOCK → {0,1}⇒((∀n⦂ℤ·n∈1 ‥ min(ℕ1 ∖ dom(delta))⇒chi(c2 ↦ n) − chi(c1 ↦ n)∈INT_IMP∧(chi(c2 ↦ n) − chi(c1 ↦ n)≠b∨c2∉(delta∪{min(ℕ1 ∖ dom(delta)) ↦ dom(clock_set ▷ {1})})(n)))⇒ctr≠b∨clock_set(c2)=0)" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.invariant#0"/>
         <org.eventb.core.poSource name="SEQHYR" org.eventb.core.poRole="DEFAULT" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.invariant#0"/>
         <org.eventb.core.poSelHint name="SEQHYS" org.eventb.core.poSelHintFst="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#ABSHYP" org.eventb.core.poSelHintSnd="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#HYPprecedence_ct{"/>
     </org.eventb.core.poSequent>
-    <org.eventb.core.poSequent name="INITIALISATION/inv1/INV" org.eventb.core.accurate="true" org.eventb.core.poDesc="Invariant  establishment" org.eventb.core.poStamp="0">
+    <org.eventb.core.poSequent name="INITIALISATION/inv1/INV" org.eventb.core.accurate="true" org.eventb.core.poDesc="Invariant  establishment" org.eventb.core.poStamp="2">
         <org.eventb.core.poPredicateSet name="SEQHYP" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#EVTALLHYPprecedence_ct}"/>
         <org.eventb.core.poPredicate name="SEQHYQ" org.eventb.core.predicate="0∈INT_IMP" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.invariant#-"/>
         <org.eventb.core.poSource name="SEQHYR" org.eventb.core.poRole="ABSTRACT" org.eventb.core.source="/proofAlexCCSL/CCSLprecedence.bum|org.eventb.core.machineFile#CCSLprecedence|org.eventb.core.event#'"/>
@@ -62,7 +62,7 @@
         <org.eventb.core.poSelHint name="SEQHYU" org.eventb.core.poSelHintFst="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#CTXHYP" org.eventb.core.poSelHintSnd="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poSequent#INITIALISATION\/inv1\/INV|org.eventb.core.poPredicateSet#SEQHYP"/>
         <org.eventb.core.poSelHint name="SEQHYV" org.eventb.core.poSelHintFst="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#HYPprecedence_ctz|org.eventb.core.poPredicate#PRD0"/>
     </org.eventb.core.poSequent>
-    <org.eventb.core.poSequent name="INITIALISATION/inv2/INV" org.eventb.core.accurate="true" org.eventb.core.poDesc="Invariant  establishment" org.eventb.core.poStamp="0">
+    <org.eventb.core.poSequent name="INITIALISATION/inv2/INV" org.eventb.core.accurate="true" org.eventb.core.poDesc="Invariant  establishment" org.eventb.core.poStamp="2">
         <org.eventb.core.poPredicateSet name="SEQHYP" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#EVTALLHYPprecedence_ct}"/>
         <org.eventb.core.poPredicate name="SEQHYQ" org.eventb.core.predicate="0=(CLOCK × {1} × {0})(c2 ↦ min(ℕ1 ∖ dom(∅ ⦂ ℙ(ℤ×ℙ(CLOCK))))) − (CLOCK × {1} × {0})(c1 ↦ min(ℕ1 ∖ dom(∅ ⦂ ℙ(ℤ×ℙ(CLOCK)))))" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.invariant#\/"/>
         <org.eventb.core.poSource name="SEQHYR" org.eventb.core.poRole="ABSTRACT" org.eventb.core.source="/proofAlexCCSL/CCSLprecedence.bum|org.eventb.core.machineFile#CCSLprecedence|org.eventb.core.event#'"/>
@@ -71,25 +71,25 @@
         <org.eventb.core.poSelHint name="SEQHYU" org.eventb.core.poSelHintFst="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#CTXHYP" org.eventb.core.poSelHintSnd="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poSequent#INITIALISATION\/inv2\/INV|org.eventb.core.poPredicateSet#SEQHYP"/>
         <org.eventb.core.poSelHint name="SEQHYV" org.eventb.core.poSelHintFst="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#HYPprecedence_ct{|org.eventb.core.poPredicate#PRD1"/>
     </org.eventb.core.poSequent>
-    <org.eventb.core.poPredicateSet name="EVTIDENTprecedence_ct}" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#CTXHYP" org.eventb.core.poStamp="0">
+    <org.eventb.core.poPredicateSet name="EVTIDENTprecedence_ct}" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#CTXHYP" org.eventb.core.poStamp="2">
         <org.eventb.core.poIdentifier name="ctr'" org.eventb.core.type="ℤ"/>
         <org.eventb.core.poIdentifier name="chi'" org.eventb.core.type="ℙ(CLOCK×ℤ×ℤ)"/>
         <org.eventb.core.poIdentifier name="delta'" org.eventb.core.type="ℙ(ℤ×ℙ(CLOCK))"/>
     </org.eventb.core.poPredicateSet>
-    <org.eventb.core.poPredicateSet name="EVTALLHYPprecedence_ct}" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#EVTIDENTprecedence_ct}" org.eventb.core.poStamp="0"/>
-    <org.eventb.core.poSequent name="Schedule/grd3/WD" org.eventb.core.accurate="true" org.eventb.core.poDesc="Well-definedness of Guard" org.eventb.core.poStamp="1">
+    <org.eventb.core.poPredicateSet name="EVTALLHYPprecedence_ct}" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#EVTIDENTprecedence_ct}" org.eventb.core.poStamp="2"/>
+    <org.eventb.core.poSequent name="Schedule/grd3/WD" org.eventb.core.accurate="true" org.eventb.core.poDesc="Well-definedness of Guard" org.eventb.core.poStamp="2">
         <org.eventb.core.poPredicateSet name="SEQHYP" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#EVTHYPprecedence_ct~clock_sew"/>
         <org.eventb.core.poPredicate name="SEQHYQ" org.eventb.core.predicate="ctr≠b∨(c2∈dom(clock_set)∧clock_set∈CLOCK ⇸ ℤ)" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.event#.|org.eventb.core.guard#)"/>
         <org.eventb.core.poSource name="SEQHYR" org.eventb.core.poRole="DEFAULT" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.event#.|org.eventb.core.guard#)"/>
         <org.eventb.core.poSelHint name="SEQHYS" org.eventb.core.poSelHintFst="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#ALLHYP" org.eventb.core.poSelHintSnd="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#EVTHYPprecedence_ct~clock_sew"/>
     </org.eventb.core.poSequent>
-    <org.eventb.core.poSequent name="Schedule/grd4/WD" org.eventb.core.accurate="true" org.eventb.core.poDesc="Well-definedness of Guard" org.eventb.core.poStamp="1">
+    <org.eventb.core.poSequent name="Schedule/grd4/WD" org.eventb.core.accurate="true" org.eventb.core.poDesc="Well-definedness of Guard" org.eventb.core.poStamp="2">
         <org.eventb.core.poPredicateSet name="SEQHYP" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#EVTHYPprecedence_ct~clock_sex"/>
         <org.eventb.core.poPredicate name="SEQHYQ" org.eventb.core.predicate="c2∈dom(clock_set)∧clock_set∈CLOCK ⇸ ℤ∧c1∈dom(clock_set)" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.event#.|org.eventb.core.guard#*"/>
         <org.eventb.core.poSource name="SEQHYR" org.eventb.core.poRole="DEFAULT" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.event#.|org.eventb.core.guard#*"/>
         <org.eventb.core.poSelHint name="SEQHYS" org.eventb.core.poSelHintFst="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#ALLHYP" org.eventb.core.poSelHintSnd="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#EVTHYPprecedence_ct~clock_sex"/>
     </org.eventb.core.poSequent>
-    <org.eventb.core.poSequent name="Schedule/inv1/INV" org.eventb.core.accurate="true" org.eventb.core.poDesc="Invariant  preservation" org.eventb.core.poStamp="1">
+    <org.eventb.core.poSequent name="Schedule/inv1/INV" org.eventb.core.accurate="true" org.eventb.core.poDesc="Invariant  preservation" org.eventb.core.poStamp="2">
         <org.eventb.core.poPredicateSet name="SEQHYP" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#EVTALLHYPprecedence_ct~"/>
         <org.eventb.core.poPredicate name="SEQHYQ" org.eventb.core.predicate="ctr+clock_set(c2) − clock_set(c1)∈INT_IMP" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.invariant#-"/>
         <org.eventb.core.poSource name="SEQHYR" org.eventb.core.poRole="ABSTRACT" org.eventb.core.source="/proofAlexCCSL/CCSLprecedence.bum|org.eventb.core.machineFile#CCSLprecedence|org.eventb.core.event#)"/>
@@ -98,7 +98,7 @@
         <org.eventb.core.poSelHint name="SEQHYU" org.eventb.core.poSelHintFst="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#ALLHYP" org.eventb.core.poSelHintSnd="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poSequent#Schedule\/inv1\/INV|org.eventb.core.poPredicateSet#SEQHYP"/>
         <org.eventb.core.poSelHint name="SEQHYV" org.eventb.core.poSelHintFst="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#HYPprecedence_ctz|org.eventb.core.poPredicate#PRD0"/>
     </org.eventb.core.poSequent>
-    <org.eventb.core.poSequent name="Schedule/inv2/INV" org.eventb.core.accurate="true" org.eventb.core.poDesc="Invariant  preservation" org.eventb.core.poStamp="1">
+    <org.eventb.core.poSequent name="Schedule/inv2/INV" org.eventb.core.accurate="true" org.eventb.core.poDesc="Invariant  preservation" org.eventb.core.poStamp="2">
         <org.eventb.core.poPredicateSet name="SEQHYP" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#EVTALLHYPprecedence_ct~"/>
         <org.eventb.core.poPredicate name="SEQHYQ" org.eventb.core.predicate="ctr+clock_set(c2) − clock_set(c1)=(chi∪{c⦂CLOCK,s⦂ℤ,n⦂ℤ·c∈CLOCK∧s=min(ℕ1 ∖ dom(delta))+1∧n=chi(c ↦ s − 1)+clock_set(c) ∣ c ↦ s ↦ n})(c2 ↦ min(ℕ1 ∖ dom(delta∪{min(ℕ1 ∖ dom(delta)) ↦ dom(clock_set ▷ {1})}))) − (chi∪{c⦂CLOCK,s⦂ℤ,n⦂ℤ·c∈CLOCK∧s=min(ℕ1 ∖ dom(delta))+1∧n=chi(c ↦ s − 1)+clock_set(c) ∣ c ↦ s ↦ n})(c1 ↦ min(ℕ1 ∖ dom(delta∪{min(ℕ1 ∖ dom(delta)) ↦ dom(clock_set ▷ {1})})))" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.invariant#\/"/>
         <org.eventb.core.poSource name="SEQHYR" org.eventb.core.poRole="ABSTRACT" org.eventb.core.source="/proofAlexCCSL/CCSLprecedence.bum|org.eventb.core.machineFile#CCSLprecedence|org.eventb.core.event#)"/>
@@ -107,35 +107,35 @@
         <org.eventb.core.poSelHint name="SEQHYU" org.eventb.core.poSelHintFst="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#ALLHYP" org.eventb.core.poSelHintSnd="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poSequent#Schedule\/inv2\/INV|org.eventb.core.poPredicateSet#SEQHYP"/>
         <org.eventb.core.poSelHint name="SEQHYV" org.eventb.core.poSelHintFst="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#HYPprecedence_ct{|org.eventb.core.poPredicate#PRD1"/>
     </org.eventb.core.poSequent>
-    <org.eventb.core.poSequent name="Schedule/act3/WD" org.eventb.core.accurate="true" org.eventb.core.poDesc="Well-definedness of action" org.eventb.core.poStamp="1">
+    <org.eventb.core.poSequent name="Schedule/act3/WD" org.eventb.core.accurate="true" org.eventb.core.poDesc="Well-definedness of action" org.eventb.core.poStamp="2">
         <org.eventb.core.poPredicateSet name="SEQHYP" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#EVTALLHYPprecedence_ct~"/>
         <org.eventb.core.poPredicate name="SEQHYQ" org.eventb.core.predicate="c2∈dom(clock_set)∧clock_set∈CLOCK ⇸ ℤ∧c1∈dom(clock_set)" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.event#.|org.eventb.core.action#("/>
         <org.eventb.core.poSource name="SEQHYR" org.eventb.core.poRole="DEFAULT" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.event#.|org.eventb.core.action#("/>
         <org.eventb.core.poSelHint name="SEQHYS" org.eventb.core.poSelHintFst="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#ALLHYP" org.eventb.core.poSelHintSnd="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#EVTALLHYPprecedence_ct~"/>
     </org.eventb.core.poSequent>
-    <org.eventb.core.poPredicateSet name="EVTIDENTprecedence_ct~" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#ALLHYP" org.eventb.core.poStamp="1">
+    <org.eventb.core.poPredicateSet name="EVTIDENTprecedence_ct~" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#ALLHYP" org.eventb.core.poStamp="2">
         <org.eventb.core.poIdentifier name="ctr'" org.eventb.core.type="ℤ"/>
         <org.eventb.core.poIdentifier name="chi'" org.eventb.core.type="ℙ(CLOCK×ℤ×ℤ)"/>
         <org.eventb.core.poIdentifier name="clock_set" org.eventb.core.type="ℙ(CLOCK×ℤ)"/>
         <org.eventb.core.poIdentifier name="delta'" org.eventb.core.type="ℙ(ℤ×ℙ(CLOCK))"/>
     </org.eventb.core.poPredicateSet>
-    <org.eventb.core.poPredicateSet name="EVTHYPprecedence_ct~clock_sew" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#EVTIDENTprecedence_ct~" org.eventb.core.poStamp="1">
+    <org.eventb.core.poPredicateSet name="EVTHYPprecedence_ct~clock_sew" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#EVTIDENTprecedence_ct~" org.eventb.core.poStamp="2">
         <org.eventb.core.poPredicate name="PRD0" org.eventb.core.predicate="clock_set∈CLOCK → {0,1}" org.eventb.core.source="/proofAlexCCSL/CCSL_generic.bum|org.eventb.core.machineFile#CCSL_generic|org.eventb.core.event#0|org.eventb.core.guard#("/>
         <org.eventb.core.poPredicate name="PRD1" org.eventb.core.predicate="∀n⦂ℤ·n∈dom(delta∪{min(ℕ1 ∖ dom(delta)) ↦ dom(clock_set ▷ {1})})⇒((chi∪{c⦂CLOCK,s⦂ℤ,i⦂ℤ·c∈CLOCK∧s=min(ℕ1 ∖ dom(delta))+1∧i=chi(c ↦ s − 1)+clock_set(c) ∣ c ↦ s ↦ i})(c2 ↦ n) − (chi∪{c⦂CLOCK,s⦂ℤ,i⦂ℤ·c∈CLOCK∧s=min(ℕ1 ∖ dom(delta))+1∧i=chi(c ↦ s − 1)+clock_set(c) ∣ c ↦ s ↦ i})(c1 ↦ n)=b⇒c2∉(delta∪{min(ℕ1 ∖ dom(delta)) ↦ dom(clock_set ▷ {1})})(n))" org.eventb.core.source="/proofAlexCCSL/CCSLprecedence.bum|org.eventb.core.machineFile#CCSLprecedence|org.eventb.core.event#)|org.eventb.core.guard#("/>
     </org.eventb.core.poPredicateSet>
-    <org.eventb.core.poPredicateSet name="EVTHYPprecedence_ct~clock_sex" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#EVTHYPprecedence_ct~clock_sew" org.eventb.core.poStamp="1">
+    <org.eventb.core.poPredicateSet name="EVTHYPprecedence_ct~clock_sex" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#EVTHYPprecedence_ct~clock_sew" org.eventb.core.poStamp="2">
         <org.eventb.core.poPredicate name="PRD2" org.eventb.core.predicate="ctr≠b∨clock_set(c2)=0" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.event#.|org.eventb.core.guard#)"/>
     </org.eventb.core.poPredicateSet>
-    <org.eventb.core.poPredicateSet name="EVTALLHYPprecedence_ct~" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#EVTHYPprecedence_ct~clock_sex" org.eventb.core.poStamp="1">
+    <org.eventb.core.poPredicateSet name="EVTALLHYPprecedence_ct~" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#EVTHYPprecedence_ct~clock_sex" org.eventb.core.poStamp="2">
         <org.eventb.core.poPredicate name="PRD3" org.eventb.core.predicate="ctr+clock_set(c2) − clock_set(c1)∈INT_IMP" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.event#.|org.eventb.core.guard#*"/>
     </org.eventb.core.poPredicateSet>
-    <org.eventb.core.poPredicateSet name="HYPprecedence_ctz" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#ABSHYP" org.eventb.core.poStamp="1">
+    <org.eventb.core.poPredicateSet name="HYPprecedence_ctz" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#ABSHYP" org.eventb.core.poStamp="2">
         <org.eventb.core.poPredicate name="PRD0" org.eventb.core.predicate="ctr∈INT_IMP" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.invariant#-"/>
     </org.eventb.core.poPredicateSet>
-    <org.eventb.core.poPredicateSet name="HYPprecedence_ct{" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#HYPprecedence_ctz" org.eventb.core.poStamp="1">
+    <org.eventb.core.poPredicateSet name="HYPprecedence_ct{" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#HYPprecedence_ctz" org.eventb.core.poStamp="2">
         <org.eventb.core.poPredicate name="PRD1" org.eventb.core.predicate="ctr=chi(c2 ↦ min(ℕ1 ∖ dom(delta))) − chi(c1 ↦ min(ℕ1 ∖ dom(delta)))" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.invariant#\/"/>
     </org.eventb.core.poPredicateSet>
-    <org.eventb.core.poPredicateSet name="ALLHYP" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#HYPprecedence_ct{" org.eventb.core.poStamp="1">
+    <org.eventb.core.poPredicateSet name="ALLHYP" org.eventb.core.parentSet="/proofAlexCCSL/ASTDprecedence.bpo|org.eventb.core.poFile#ASTDprecedence|org.eventb.core.poPredicateSet#HYPprecedence_ct{" org.eventb.core.poStamp="2">
         <org.eventb.core.poPredicate name="PRD2" org.eventb.core.predicate="∀clock_set⦂ℙ(CLOCK×ℤ)·clock_set∈CLOCK → {0,1}⇒((∀n⦂ℤ·n∈1 ‥ min(ℕ1 ∖ dom(delta))⇒chi(c2 ↦ n) − chi(c1 ↦ n)∈INT_IMP∧(chi(c2 ↦ n) − chi(c1 ↦ n)≠b∨c2∉(delta∪{min(ℕ1 ∖ dom(delta)) ↦ dom(clock_set ▷ {1})})(n)))⇒ctr≠b∨clock_set(c2)=0)" org.eventb.core.source="/proofAlexCCSL/ASTDprecedence.bum|org.eventb.core.machineFile#ASTDprecedence|org.eventb.core.invariant#0"/>
     </org.eventb.core.poPredicateSet>
 </org.eventb.core.poFile>
