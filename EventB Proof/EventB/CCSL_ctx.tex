@@ -1,0 +1,32 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage{bsymb,b2latex}
+\begin{document}
+\SingleHeader{CCSL\_ctx}
+\CONTEXT{CCSL\_ctx}{}{}
+\SETS{
+	\Set{CLOCK}{}
+}
+\CONSTANTS{
+	\Constant{c1}{}
+	\Constant{c2}{}
+	\Constant{c3}{}
+	\Constant{minint}{}
+	\Constant{maxint}{}
+	\Constant{INT\_IMP}{}
+	\Constant{NAT\_IMP}{}
+	\Constant{NAT1\_IMP}{}
+	\Constant{Int2Bool}{}
+}
+\AXIOMS{
+	\Axiom{axm1}{false}{$\{c1,c2,c3\} \subseteq{} CLOCK$}{}
+	\Axiom{axm2}{false}{$c1 \neq{} c2 \land{} c2\neq{} c3 \land{} c3\neq{}c1$}{}
+	\Axiom{axm4}{false}{$maxint \in{} \nat{}$}{}
+	\Axiom{axm5}{false}{$minint < 0$}{}
+	\Axiom{axm6}{false}{$INT\_IMP = minint\upto{}maxint$}{}
+	\Axiom{axm12}{false}{$NAT\_IMP = 0\upto{}maxint$}{}
+	\Axiom{axm13}{false}{$NAT1\_IMP = NAT\_IMP\setminus{}\{0\}$}{}
+	\Axiom{axm15}{false}{$maxint > 0$}{}
+	\Axiom{axm16}{false}{$Int2Bool = (\lambda{}i\qdot{}i\in{}\intg{} | bool(i\neq{}0))$}{}
+}
+\END
+\end{document}

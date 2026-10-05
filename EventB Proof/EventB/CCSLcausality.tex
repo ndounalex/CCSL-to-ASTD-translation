@@ -1,0 +1,35 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage{bsymb,b2latex}
+\begin{document}
+\SingleHeader{CCSLcausality}
+\MACHINE{CCSLcausality}{CCSL\_generic}{CCSL\_ctx}{}
+\VARIABLES{
+	\Variable{delta}{}
+	\Variable{chi}{}
+}
+\INVARIANTS{
+	\Invariant{inv1}{false}{$\forall{}n \qdot{} n\in{}ran(dom(chi)) \limp{} chi(c1\mapsto{} n) \geq{} chi(c2\mapsto{} n)$}{}
+}
+\EVENTS{
+\INITIALISATION{true}{}{
+	\ACTIONS{false}{
+		\Action{act1}{$chi \bcmeq{} CLOCK \cprod{} \{1\} \cprod{} \{0\}$}{false}{}
+		\Action{act2}{$delta \bcmeq{} \emptyset{}$}{false}{}
+	}
+}
+\EVT{Schedule}{true}{ordinary}{Schedule}{}{
+	\ANY{
+		\Param{clock\_set}{false}{}
+	}
+	\GUARDS{true}{
+		\Guard{grd1}{false}{$clock\_set \in{} CLOCK \tfun{} \{0,1\}$}{false}{}
+		\Guard{grd2}{false}{$\forall{}n \qdot{} n\in{}1\upto{}(min(\natn{} \setminus{} dom(delta))+1) \limp{} (chi \bunion{} \{(c\mapsto{}s)\mapsto{}x| c \in{} CLOCK \land{} s=(min(\natn{} \setminus{} dom(delta))+1) \land{} x=chi(c\mapsto{}(s-1))+clock\_set(c) \})(c1\mapsto{} n) \geq{} (chi \bunion{} \{(c\mapsto{}s)\mapsto{}x| c \in{} CLOCK \land{} s=(min(\natn{} \setminus{} dom(delta))+1) \land{} x=chi(c\mapsto{}(s-1))+clock\_set(c) \})(c2\mapsto{} n)$}{true}{}
+	}
+	\ACTIONS{true}{
+		\Action{act1}{$delta \bcmeq{}  delta \bunion{}  \{(min(\natn{} \setminus{} dom(delta))) \mapsto{} dom(clock\_set \ranres{} \{1\})\}$}{false}{}
+		\Action{act2}{$chi \bcmeq{} chi \bunion{}  \{(c\mapsto{}s)\mapsto{}n| c \in{} CLOCK \land{} s=(min(\natn{} \setminus{} dom(delta))+1) \land{} n=chi(c\mapsto{}(s-1))+clock\_set(c) \}$}{false}{}
+	}
+}
+}
+\END
+\end{document}

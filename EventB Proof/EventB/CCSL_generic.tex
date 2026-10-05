@@ -1,0 +1,38 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage{bsymb,b2latex}
+\begin{document}
+\SingleHeader{CCSL\_generic}
+\MACHINE{CCSL\_generic}{}{CCSL\_ctx}{}
+\VARIABLES{
+	\Variable{chi}{}
+	\Variable{delta}{}
+}
+\INVARIANTS{
+	\Invariant{inv1}{false}{$chi \in{} (CLOCK \cprod{} \natn{}) \pfun{} \nat{}$}{}
+	\Invariant{inv2}{false}{$delta \in{} \natn{} \pfun{} \pow{}(CLOCK)$}{}
+	\Invariant{inv3}{false}{$\exists{}n \qdot{} n \in{} \nat{} \land{} dom(delta)\bunion{}\{0\}=0\upto{}n $}{}
+	\Invariant{inv4}{false}{$\exists{}n \qdot{} n \in{} \nat{} \land{} dom(chi) = CLOCK \cprod{} 1\upto{}n \land{} n=min(\natn{}\setminus{}dom(delta))$}{}
+	\Invariant{inv5}{false}{$\\\forall{}c \qdot{} c\in{}CLOCK \limp{} ( chi(c\mapsto{}1)=0 \land{} (\\~~~~ \forall{}i \qdot{} i \in{} dom(delta) \limp{} (\\~~~~	(c\in{}delta(i) \limp{} chi(c\mapsto{}i+1) = chi(c\mapsto{}i) +1) \land{}\\~~~~	(c\notin{}delta(i) \limp{} chi(c\mapsto{}i+1) = chi(c\mapsto{}i)) )))$}{}
+}
+\EVENTS{
+\INITIALISATION{false}{}{
+	\ACTIONS{false}{
+		\Action{act1}{$chi \bcmeq{} CLOCK \cprod{} \{1\} \cprod{} \{0\}$}{true}{}
+		\Action{act2}{$delta \bcmeq{} \emptyset{}$}{true}{}
+	}
+}
+\EVT{Schedule}{false}{ordinary}{}{}{
+	\ANY{
+		\Param{clock\_set}{true}{}
+	}
+	\GUARDS{true}{
+		\Guard{grd1}{false}{$clock\_set \in{} CLOCK \tfun{} \{0,1\}$}{true}{}
+	}
+	\ACTIONS{true}{
+		\Action{act1}{$delta \bcmeq{}  delta \bunion{}  \{(min(\natn{} \setminus{} dom(delta))) \mapsto{} dom(clock\_set \ranres{} \{1\})\}$}{true}{}
+		\Action{act2}{$chi \bcmeq{} chi \bunion{}  \{(c\mapsto{}s)\mapsto{}n| c \in{} CLOCK \land{} s=(min(\natn{} \setminus{} dom(delta))+1) \land{} n=chi(c\mapsto{}(s-1))+clock\_set(c) \}$}{true}{}
+	}
+}
+}
+\END
+\end{document}

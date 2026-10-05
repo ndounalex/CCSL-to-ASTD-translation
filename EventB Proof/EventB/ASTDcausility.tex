@@ -1,0 +1,41 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage{bsymb,b2latex}
+\begin{document}
+\SingleHeader{ASTDcausility}
+\MACHINE{ASTDcausility}{CCSLcausality}{CCSL\_ctx}{}
+\VARIABLES{
+	\Variable{chi}{}
+	\Variable{delta}{}
+	\Variable{ctr}{}
+}
+\INVARIANTS{
+	\Invariant{inv2}{false}{$ctr = chi(c1\mapsto{}(min(\natn{} \setminus{} dom(delta)))) - chi(c2\mapsto{}(min(\natn{} \setminus{} dom(delta))))$}{}
+	\Invariant{inv1}{true}{$\\~\forall{}clock\_set \qdot{} clock\_set \in{} CLOCK \tfun{} \{0,1\} \limp{} (\\~~~~(\forall{}n \qdot{} n\in{}1\upto{}(min(\natn{} \setminus{} dom(delta))+1) \limp{} \\~~~~	(chi \bunion{} \{(c\mapsto{}s)\mapsto{}x| c \in{} CLOCK \land{} s=(min(\natn{} \setminus{} dom(delta))+1) \land{} \\~~~~				x=chi(c\mapsto{}(s-1))+clock\_set(c) \})(c1\mapsto{} n) \\~~~~	- (chi \bunion{} \{(c\mapsto{}s)\mapsto{}x| c \in{} CLOCK \land{} s=(min(\natn{} \setminus{} dom(delta))+1) \land{}\\~~~~				x=chi(c\mapsto{}(s-1))+clock\_set(c) \})(c2\mapsto{} n)\in{} INT\_IMP \land{} \\~~~~	(chi \bunion{} \{(c\mapsto{}s)\mapsto{}x| c \in{} CLOCK \land{} s=(min(\natn{} \setminus{} dom(delta))+1) \land{}\\~~~~				x=chi(c\mapsto{}(s-1))+clock\_set(c) \})(c1\mapsto{} n) \\~~~~	\geq{} 	\\~~~~	(chi \bunion{} \{(c\mapsto{}s)\mapsto{}x| c \in{} CLOCK \land{} s=(min(\natn{} \setminus{} dom(delta))+1) \land{} \\~~~~				x=chi(c\mapsto{}(s-1))+clock\_set(c) \})(c2\mapsto{} n)\\~~~~)\\~~~~\limp{}\\~~~~	((ctr + clock\_set(c1) - clock\_set(c2)) \geq{} 0) \\)$}{}
+}
+\EVENTS{
+\INITIALISATION{true}{}{
+	\ACTIONS{false}{
+		\Action{act1}{$chi \bcmeq{} CLOCK \cprod{} \{1\} \cprod{} \{0\}$}{false}{}
+		\Action{act2}{$delta \bcmeq{} \emptyset{}$}{false}{}
+		\Action{act3}{$ctr \bcmeq{} 0$}{true}{}
+	}
+}
+\EVT{Schedule}{true}{ordinary}{Schedule}{}{
+	\ANY{
+		\Param{clock\_set}{false}{}
+	}
+	\GUARDS{true}{
+		\Guard{grd1}{false}{$clock\_set \in{} CLOCK \tfun{} \{0,1\}$}{false}{}
+		\Guard{grd2}{false}{$\forall{}n \qdot{} n\in{}1\upto{}(min(\natn{} \setminus{} dom(delta))+1) \limp{} (chi \bunion{} \{(c\mapsto{}s)\mapsto{}x| c \in{} CLOCK \land{} s=(min(\natn{} \setminus{} dom(delta))+1) \land{} x=chi(c\mapsto{}(s-1))+clock\_set(c) \})(c1\mapsto{} n) \geq{} (chi \bunion{} \{(c\mapsto{}s)\mapsto{}x| c \in{} CLOCK \land{} s=(min(\natn{} \setminus{} dom(delta))+1) \land{} x=chi(c\mapsto{}(s-1))+clock\_set(c) \})(c2\mapsto{} n)$}{false}{}
+		\Guard{grd3}{false}{$(ctr + clock\_set(c1) - clock\_set(c2)) \geq{} 0$}{true}{}
+		\Guard{grd4}{false}{$ctr + clock\_set(c1) - clock\_set(c2) \in{} NAT\_IMP$}{true}{}
+	}
+	\ACTIONS{true}{
+		\Action{act1}{$delta \bcmeq{}  delta \bunion{}  \{(min(\natn{} \setminus{} dom(delta))) \mapsto{} dom(clock\_set \ranres{} \{1\})\}$}{false}{}
+		\Action{act2}{$chi \bcmeq{} chi \bunion{}  \{(c\mapsto{}s)\mapsto{}n| c \in{} CLOCK \land{} s=(min(\natn{} \setminus{} dom(delta))+1) \land{} n=chi(c\mapsto{}(s-1))+clock\_set(c) \}$}{false}{}
+		\Action{act3}{$ctr \bcmeq{} ctr + clock\_set(c1) - clock\_set(c2) $}{true}{}
+	}
+}
+}
+\END
+\end{document}
