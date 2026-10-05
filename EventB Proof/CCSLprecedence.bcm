@@ -25,7 +25,7 @@
     </org.eventb.core.scInternalContext>
     <org.eventb.core.scInternalContext name="precedence_ctx">
         <org.eventb.core.scExtendsContext name="'" org.eventb.core.scTarget="/proofAlexCCSL/CCSL_ctx.bcc|org.eventb.core.scContextFile#CCSL_ctx" org.eventb.core.source="/proofAlexCCSL/precedence_ctx.buc|org.eventb.core.contextFile#precedence_ctx|org.eventb.core.extendsContext#("/>
-        <org.eventb.core.scAxiom name="CCSL_cty" org.eventb.core.label="axm1" org.eventb.core.predicate="b∈INT_IMP" org.eventb.core.source="/proofAlexCCSL/precedence_ctx.buc|org.eventb.core.contextFile#precedence_ctx|org.eventb.core.axiom#)" org.eventb.core.theorem="false"/>
+        <org.eventb.core.scAxiom name="CCSL_cty" org.eventb.core.label="axm1" org.eventb.core.predicate="b∈NAT_IMP" org.eventb.core.source="/proofAlexCCSL/precedence_ctx.buc|org.eventb.core.contextFile#precedence_ctx|org.eventb.core.axiom#)" org.eventb.core.theorem="false"/>
         <org.eventb.core.scConstant name="b" org.eventb.core.source="/proofAlexCCSL/precedence_ctx.buc|org.eventb.core.contextFile#precedence_ctx|org.eventb.core.constant#'" org.eventb.core.type="ℤ"/>
     </org.eventb.core.scInternalContext>
     <org.eventb.core.scInvariant name="CCSL_cty" org.eventb.core.label="inv1" org.eventb.core.predicate="chi∈CLOCK × ℕ1 ⇸ ℕ" org.eventb.core.source="/proofAlexCCSL/CCSL_generic.bum|org.eventb.core.machineFile#CCSL_generic|org.eventb.core.invariant#*" org.eventb.core.theorem="false"/>
