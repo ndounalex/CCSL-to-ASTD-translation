@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<org.eventb.core.scContextFile org.eventb.core.accurate="true" org.eventb.core.configuration="org.eventb.core.fwd">
+<org.eventb.core.scContextFile org.eventb.core.accurate="true" org.eventb.core.configuration="org.eventb.core.fwd;de.prob.symbolic.ctxBase">
     <org.eventb.core.scExtendsContext name="'" org.eventb.core.scTarget="/proofAlexCCSL/CCSL_ctx.bcc|org.eventb.core.scContextFile#CCSL_ctx" org.eventb.core.source="/proofAlexCCSL/precedence_ctx.buc|org.eventb.core.contextFile#precedence_ctx|org.eventb.core.extendsContext#("/>
     <org.eventb.core.scInternalContext name="CCSL_ctx">
         <org.eventb.core.scAxiom name="'" org.eventb.core.label="axm1" org.eventb.core.predicate="{c1,c2,c3}⊆CLOCK" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm1" org.eventb.core.theorem="false"/>
@@ -22,6 +22,6 @@
         <org.eventb.core.scConstant name="maxint" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.constant#cst5" org.eventb.core.type="ℤ"/>
         <org.eventb.core.scConstant name="minint" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.constant#cst4" org.eventb.core.type="ℤ"/>
     </org.eventb.core.scInternalContext>
-    <org.eventb.core.scAxiom name="CCSL_cty" org.eventb.core.label="axm1" org.eventb.core.predicate="b∈INT_IMP" org.eventb.core.source="/proofAlexCCSL/precedence_ctx.buc|org.eventb.core.contextFile#precedence_ctx|org.eventb.core.axiom#)" org.eventb.core.theorem="false"/>
+    <org.eventb.core.scAxiom name="CCSL_cty" org.eventb.core.label="axm1" org.eventb.core.predicate="b∈NAT_IMP" org.eventb.core.source="/proofAlexCCSL/precedence_ctx.buc|org.eventb.core.contextFile#precedence_ctx|org.eventb.core.axiom#)" org.eventb.core.theorem="false"/>
     <org.eventb.core.scConstant name="b" org.eventb.core.source="/proofAlexCCSL/precedence_ctx.buc|org.eventb.core.contextFile#precedence_ctx|org.eventb.core.constant#'" org.eventb.core.type="ℤ"/>
 </org.eventb.core.scContextFile>

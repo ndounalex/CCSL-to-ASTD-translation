@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<org.eventb.core.poFile org.eventb.core.poStamp="0">
+<org.eventb.core.poFile org.eventb.core.poStamp="1">
     <org.eventb.core.poPredicateSet name="ABSHYP" org.eventb.core.poStamp="0">
         <org.eventb.core.poIdentifier name="CLOCK" org.eventb.core.type="ℙ(CLOCK)"/>
         <org.eventb.core.poIdentifier name="INT_IMP" org.eventb.core.type="ℙ(ℤ)"/>
@@ -22,7 +22,7 @@
         <org.eventb.core.poPredicate name="NAT1_IMY" org.eventb.core.predicate="Int2Bool=(λi⦂ℤ·i∈ℤ ∣ bool(i≠0))" org.eventb.core.source="/proofAlexCCSL/CCSL_ctx.buc|org.eventb.core.contextFile#CCSL_ctx|org.eventb.core.axiom#axm8"/>
         <org.eventb.core.poIdentifier name="b" org.eventb.core.type="ℤ"/>
     </org.eventb.core.poPredicateSet>
-    <org.eventb.core.poPredicateSet name="ALLHYP" org.eventb.core.parentSet="/proofAlexCCSL/precedence_ctx.bpo|org.eventb.core.poFile#precedence_ctx|org.eventb.core.poPredicateSet#ABSHYP" org.eventb.core.poStamp="0">
-        <org.eventb.core.poPredicate name="PRD0" org.eventb.core.predicate="b∈INT_IMP" org.eventb.core.source="/proofAlexCCSL/precedence_ctx.buc|org.eventb.core.contextFile#precedence_ctx|org.eventb.core.axiom#)"/>
+    <org.eventb.core.poPredicateSet name="ALLHYP" org.eventb.core.parentSet="/proofAlexCCSL/precedence_ctx.bpo|org.eventb.core.poFile#precedence_ctx|org.eventb.core.poPredicateSet#ABSHYP" org.eventb.core.poStamp="1">
+        <org.eventb.core.poPredicate name="PRD0" org.eventb.core.predicate="b∈NAT_IMP" org.eventb.core.source="/proofAlexCCSL/precedence_ctx.buc|org.eventb.core.contextFile#precedence_ctx|org.eventb.core.axiom#)"/>
     </org.eventb.core.poPredicateSet>
 </org.eventb.core.poFile>
